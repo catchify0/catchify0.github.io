@@ -328,7 +328,7 @@ function loadGitHubStats() {
   if (cached && typeof cached.stars === "number") {
     animateCount(starsEl, cached.stars, "");
     animateCount(forksEl, cached.forks, "");
-    animateCount(downloadsEl, cached.downloads, "+");
+    animateCount(downloadsEl, cached.downloads, "");
   }
 
   function saveCache(stars, forks, downloads) {
@@ -383,7 +383,7 @@ function loadGitHubStats() {
           }
         });
         if (downloadsEl && total > 0) {
-          animateCount(downloadsEl, total, "+");
+          animateCount(downloadsEl, total, "");
           saveCache(null, null, total);
         }
       }
@@ -406,7 +406,7 @@ function loadGitHubStats() {
             animateCount(forksEl, checkData.stats.forks, "");
           }
           if (downloadsEl && typeof checkData.stats.downloads === "number") {
-            animateCount(downloadsEl, checkData.stats.downloads, "+");
+            animateCount(downloadsEl, checkData.stats.downloads, "");
           }
         }
       })
