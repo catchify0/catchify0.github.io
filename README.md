@@ -48,9 +48,32 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
 
 ## Download
 
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/thamodharangm/catchify/releases/latest">
+        <img src="https://github.com/thamodharangm/catchify/raw/main/.github/assets/get-it-on-github.png" alt="Get Android APK" height="60"><br/>
+        <b>Android (.apk)</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/thamodharangm/catchify/releases/latest">
+        <img src="https://img.shields.io/badge/iOS_IPA-Download_Latest-007AFF?style=for-the-badge&logo=apple&logoColor=white" height="60" alt="Download iOS IPA"><br/>
+        <b>iOS (.ipa)</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://catchify.textmateai.online/">
+        <img src="https://img.shields.io/badge/Official_Website-catchify.online-A855F7?style=for-the-badge&logo=google-chrome&logoColor=white" height="60" alt="Official Website"><br/>
+        <b>Web & Guides</b>
+      </a>
+    </td>
+  </tr>
+</table>
 
-[<img src="https://github.com/thamodharangm/catchify/raw/main/.github/assets/get-it-on-github.png" alt="Get it on Github" height="80">](https://github.com/thamodharangm/catchify-apK/releases/latest)
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on Fdroid" height="80">](https://f-droid.org/packages/com.thamodharangm.catchify.fdroid)
+- **Android Direct Download:** [Latest APK](https://github.com/thamodharangm/catchify/releases/latest)
+- **iOS Sideloading (Sideloadly / AltStore / TrollStore):** [Latest IPA](https://github.com/thamodharangm/catchify/releases/latest)
+- **Official Website:** [catchify.textmateai.online](https://catchify.textmateai.online/)
 
 
 ---
@@ -68,7 +91,7 @@ Special thanks to all contributors for their time and effort.
 
 ## Contribute
 
-Contributions are always welcome. Please read our [contributing guidelines](https://github.com/thamodharangm/catchify/blob/master/CONTRIBUTING.md) before contributing.
+Contributions are always welcome. Please read our [contributing guidelines](https://github.com/thamodharangm/catchify/blob/main/CONTRIBUTING.md) before contributing.
 
 ---
 
@@ -97,7 +120,7 @@ retain copyright notices and include a copy of the license in distributions.
 Allowed: Commercial use, modification, distribution, and patent use.
 ```
 
-See the [Apache License 2.0](https://github.com/thamodharangm/catchify/blob/master/LICENSE) for full details.
+See the [Apache License 2.0](https://github.com/thamodharangm/catchify/blob/main/LICENSE) for full details.
 
 ---
 
