@@ -4,6 +4,7 @@ const IOS_RELEASES_API =
   "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
 const REPO_API = "https://api.github.com/repos/thamodharangm/catchify";
 const ALL_RELEASES_API = "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100";
+const STATS_URL = "stats.json";
 const FEATURES_URL = "assets/features.txt";
 
 const changelogElement = document.getElementById("changelog_element");
@@ -139,7 +140,32 @@ function formatNumber(n) {
 }
 
 function fetchProjectStats() {
-  // Fetch stars & forks
+  // Try local stats.json first (updated hourly by GitHub Actions — no rate limits)
+  makeHttpRequest(
+    STATS_URL,
+    (res) => {
+      try {
+        const stats = JSON.parse(res);
+        const starsEl = document.getElementById("stat-stars");
+        const forksEl = document.getElementById("stat-forks");
+        const downloadsEl = document.getElementById("stat-downloads");
+        if (starsEl) starsEl.textContent = formatNumber(stats.stars || 0);
+        if (forksEl) forksEl.textContent = formatNumber(stats.forks || 0);
+        if (downloadsEl) downloadsEl.textContent = formatNumber(stats.downloads || 0);
+      } catch (e) {
+        console.warn("stats.json parse error, falling back to API:", e);
+        fetchProjectStatsFromAPI();
+      }
+    },
+    () => {
+      // stats.json not found — fall back to direct GitHub API
+      fetchProjectStatsFromAPI();
+    },
+  );
+}
+
+function fetchProjectStatsFromAPI() {
+  // Fallback: fetch stars & forks from GitHub API
   makeHttpRequest(
     REPO_API,
     (res) => {
@@ -156,7 +182,7 @@ function fetchProjectStats() {
     () => {},
   );
 
-  // Fetch total downloads across ALL releases
+  // Fallback: fetch total downloads across ALL releases
   makeHttpRequest(
     ALL_RELEASES_API,
     (res) => {
