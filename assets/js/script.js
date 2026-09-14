@@ -1,4 +1,4 @@
-﻿const RELEASES_API =
+const RELEASES_API =
   "https://api.github.com/repos/thamodharangm/catchify/releases/latest";
 const IOS_RELEASES_API =
   "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
@@ -74,12 +74,13 @@ function fetchLatestRelease() {
           });
         }
 
-        // 2. iOS Asset Selection (.ipa or .zip)
-        let iosAsset = (release.assets || []).find(
-          (a) =>
-            a.name.endsWith(".ipa") ||
-            (a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip")),
-        );
+        // 2. iOS Asset Selection (strictly prioritize .ipa for direct Sideloadly download)
+        let iosAsset = (release.assets || []).find((a) => a.name.endsWith(".ipa"));
+        if (!iosAsset) {
+          iosAsset = (release.assets || []).find(
+            (a) => a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip"),
+          );
+        }
 
         if (iosAsset) {
           document.querySelectorAll("[data-download-link='ios']").forEach((el) => {
@@ -130,11 +131,12 @@ function fetchIosFallbackRelease() {
     (res) => {
       try {
         const release = JSON.parse(res);
-        const iosAsset = (release.assets || []).find(
-          (a) =>
-            a.name.endsWith(".ipa") ||
-            (a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip")),
-        );
+        let iosAsset = (release.assets || []).find((a) => a.name.endsWith(".ipa"));
+        if (!iosAsset) {
+          iosAsset = (release.assets || []).find(
+            (a) => a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip"),
+          );
+        }
         if (iosAsset) {
           document.querySelectorAll("[data-download-link='ios']").forEach((el) => {
             el.setAttribute("href", iosAsset.browser_download_url);
