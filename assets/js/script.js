@@ -1,4 +1,4 @@
-const RELEASES_API =
+ï»¿const RELEASES_API =
   "https://api.github.com/repos/thamodharangm/catchify/releases/latest";
 const IOS_RELEASES_API =
   "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
@@ -69,7 +69,7 @@ function fetchLatestRelease() {
         }
 
         if (apkAsset) {
-          document.querySelectorAll("[data-download-link], [data-download-link='android']").forEach((el) => {
+          document.querySelectorAll("[data-download-link='android'], [data-download-link]:not([data-download-link='ios'])").forEach((el) => {
             el.setAttribute("href", apkAsset.browser_download_url);
           });
         }
@@ -172,7 +172,7 @@ const FEATURE_ICONS = [
 ];
 
 const FALLBACK_FEATURES = [
-  "No ads, no subscriptions, no hidden costs — completely free to use",
+  "No ads, no subscriptions, no hidden costs ï¿½ completely free to use",
   "Download songs and playlists to listen anywhere, even offline",
   "Create custom playlists, import them via link, and organize them into folders",
   "Fine-tune your sound with an adjustable equalizer and ready-made presets",
@@ -236,7 +236,7 @@ function parseChangelog(text) {
       hasBullet = true;
       const processedText = itemMatch[1].replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
       const listItem = document.createElement("p");
-      listItem.innerHTML = `• ${processedText}`;
+      listItem.innerHTML = `ï¿½ ${processedText}`;
       changelogElement.appendChild(listItem);
     }
   });

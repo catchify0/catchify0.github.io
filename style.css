@@ -654,35 +654,125 @@ main {
 }
 
 
-/* iOS Button & Guide Styling */
-.hero-actions button.ios-btn {
-  background: var(--surface-container-highest, #2c2b30);
-  color: var(--on-surface, #ffffff);
-  border: 1px solid var(--outline-variant, rgba(255, 255, 255, 0.2));
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+/* Modern Platform Download Buttons */
+.hero-actions {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
 }
 
-.hero-actions button.ios-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-}
-
-.hero-ios-note {
-  margin-top: 0.9rem;
-  font-size: 0.92rem;
-}
-
-.hero-ios-note a {
+.platform-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: var(--primary);
+  justify-content: center;
+  gap: 0.55rem;
+  height: 48px;
+  padding: 0 1.4rem;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.2s ease,
+              border-color 0.2s ease;
+  user-select: none;
 }
 
-.hero-ios-note a:hover {
+.platform-btn .btn-icon {
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.platform-btn .btn-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 0.12rem 0.42rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Android Button */
+.platform-btn.btn-android {
+  background: #a855f7;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+}
+
+.platform-btn.btn-android:hover {
+  transform: translateY(-2px);
+  background: #9333ea;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+}
+
+/* iOS Button */
+.platform-btn.btn-ios {
+  background: #1c1c1e;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.platform-btn.btn-ios:hover {
+  transform: translateY(-2px);
+  background: #2c2c2e;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* GitHub Button */
+.platform-btn.btn-github {
+  background: transparent;
+  color: var(--on-surface, #1e1e1e);
+  border: 1.5px solid var(--outline-variant, rgba(0, 0, 0, 0.18));
+}
+
+.platform-btn.btn-github:hover {
+  transform: translateY(-2px);
+  background: var(--surface-container-high, rgba(0, 0, 0, 0.04));
+  border-color: var(--outline, rgba(0, 0, 0, 0.35));
+}
+
+/* Hero Meta Bar */
+.hero-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  color: var(--on-surface-variant, #6b7280);
+}
+
+.hero-meta-bar .version-badge {
+  font-weight: 600;
+  color: var(--primary, #a855f7);
+}
+
+.hero-meta-bar .meta-separator {
+  opacity: 0.45;
+}
+
+.hero-meta-bar .guide-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--primary, #a855f7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.hero-meta-bar .guide-link:hover {
   text-decoration: underline;
+  opacity: 0.85;
 }
 
 .ios-install-content {
