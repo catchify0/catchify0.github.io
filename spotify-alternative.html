@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>5 Reasons Catchify is the Best Free Spotify Alternative for Android &amp; iOS</title>
     <meta
       name="description"
@@ -90,19 +90,30 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" as="style" />
     <link href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="style.css?v=20260914a" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=20260914b" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800;900&display=swap" rel="stylesheet" />
   </head>
 
   <body class="light article-page">
-    <nav id="navigation-bar" class="left">
+    <nav id="navigation-bar">
       <header class="catchify-nav-logo">
         <a href="index.html" class="nav-brand-link">
           <img class="large catchify-logo" src="assets/logo.png" alt="Catchify logo" width="48" height="48" />
           <span class="nav-brand-name">Catchify</span>
         </a>
+        <button
+          id="nav-toggle"
+          class="nav-toggle-btn"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </header>
       <a href="index.html#hero">
         <i>home</i>
@@ -129,6 +140,7 @@
         <span>F.A.Q</span>
       </a>
     </nav>
+    <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
     <main class="responsive article-container">
       <!-- Article Header -->
@@ -225,6 +237,10 @@
         <!-- Direct Comparison Summary Table -->
         <section class="article-section">
           <h2>Summary Comparison: Catchify vs. Spotify Free</h2>
+          <div class="table-scroll-hint" aria-hidden="true">
+            <i>swipe</i>
+            <span>Swipe horizontally to compare all features</span>
+          </div>
           <div class="compare-table-wrapper">
             <table class="compare-table">
               <thead>
@@ -299,4 +315,5 @@
       </footer>
     </main>
   </body>
+  <script type="text/javascript" src="assets/js/script.js?v=20260914b" defer></script>
 </html>

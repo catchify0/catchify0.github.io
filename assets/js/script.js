@@ -27,21 +27,33 @@ function makeHttpRequest(url, callback, onError) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  new Splide("#screenshot-carousel", {
-    type: "loop",
-    perPage: 3,
-    gap: "2rem",
-    pagination: true,
-    arrows: false,
-    autoplay: true,
-    interval: 3000,
-    pauseOnHover: true,
-    breakpoints: {
-      1200: { perPage: 3, gap: "2rem" },
-      699: { perPage: 2, gap: "1.5rem" },
-      560: { perPage: 1, gap: "1rem" },
-    },
-  }).mount();
+  const carouselEl = document.getElementById("screenshot-carousel");
+  if (carouselEl && typeof Splide !== "undefined") {
+    new Splide("#screenshot-carousel", {
+      type: "loop",
+      perPage: 3,
+      gap: "2rem",
+      pagination: true,
+      arrows: false,
+      autoplay: true,
+      interval: 3000,
+      pauseOnHover: true,
+      breakpoints: {
+        1200: { perPage: 3, gap: "2rem" },
+        992: { perPage: 2, gap: "1.5rem" },
+        640: {
+          perPage: 1,
+          gap: "1rem",
+          padding: { left: "10%", right: "10%" },
+        },
+        380: {
+          perPage: 1,
+          gap: "0.5rem",
+          padding: "0",
+        },
+      },
+    }).mount();
+  }
 });
 
 window.onload = function () {
@@ -255,11 +267,14 @@ function parseChangelog(text) {
 
 function assignNavClass() {
   const nav = document.getElementById("navigation-bar");
-  if (window.innerWidth > 760) {
+  if (!nav) return;
+  if (window.innerWidth > 992) {
     nav.classList.remove("top", "nav-open");
     nav.classList.add("left");
     const toggle = document.getElementById("nav-toggle");
     if (toggle) toggle.setAttribute("aria-expanded", "false");
+    const backdrop = document.getElementById("nav-backdrop");
+    if (backdrop) backdrop.classList.remove("active");
   } else {
     nav.classList.remove("left");
     nav.classList.add("top");
@@ -269,17 +284,51 @@ function assignNavClass() {
 function setupNavToggle() {
   const nav = document.getElementById("navigation-bar");
   const toggle = document.getElementById("nav-toggle");
+  const backdrop = document.getElementById("nav-backdrop");
   if (!nav || !toggle) return;
 
-  toggle.addEventListener("click", function () {
-    const isOpen = nav.classList.toggle("nav-open");
-    toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  function toggleMenu(force) {
+    const shouldOpen = typeof force === "boolean" ? force : !nav.classList.contains("nav-open");
+    if (shouldOpen) {
+      nav.classList.add("nav-open");
+      toggle.setAttribute("aria-expanded", "true");
+      if (backdrop) backdrop.classList.add("active");
+    } else {
+      nav.classList.remove("nav-open");
+      toggle.setAttribute("aria-expanded", "false");
+      if (backdrop) backdrop.classList.remove("active");
+    }
+  }
+
+  toggle.addEventListener("click", function (e) {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  if (backdrop) {
+    backdrop.addEventListener("click", function () {
+      toggleMenu(false);
+    });
+  }
+
+  // Close when clicking outside of nav
+  document.addEventListener("click", function (e) {
+    if (nav.classList.contains("nav-open") && !nav.contains(e.target)) {
+      toggleMenu(false);
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && nav.classList.contains("nav-open")) {
+      toggleMenu(false);
+      toggle.focus();
+    }
   });
 
   nav.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", function () {
-      nav.classList.remove("nav-open");
-      toggle.setAttribute("aria-expanded", "false");
+      toggleMenu(false);
     });
   });
 }
