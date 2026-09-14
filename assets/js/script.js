@@ -32,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
     gap: "2rem",
     pagination: true,
     arrows: false,
+    autoplay: true,
+    interval: 3000,
+    pauseOnHover: true,
     breakpoints: {
       1200: { perPage: 3, gap: "2rem" },
       699: { perPage: 2, gap: "1.5rem" },

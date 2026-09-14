@@ -40,8 +40,20 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
 
 ## Screenshots
 
-| ![Screenshot 1](https://raw.githubusercontent.com/thamodharangm/catchify/main/fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg) | ![Screenshot 2](https://raw.githubusercontent.com/thamodharangm/catchify/main/fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg) | ![Screenshot 3](https://raw.githubusercontent.com/thamodharangm/catchify/main/fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg) | ![Screenshot 4](https://raw.githubusercontent.com/thamodharangm/catchify/main/fastlane/metadata/android/en-US/images/phoneScreenshots/04.jpg) |
-|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+<div align="center">
+
+| Home Feed | Now Playing Player | Synced Lyrics |
+| :---: | :---: | :---: |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01.jpg" width="220" alt="Home Feed"/> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02.jpg" width="220" alt="Now Playing Player"/> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/03.jpg" width="220" alt="Synced Lyrics"/> |
+
+<br/>
+
+| Instant Search | Music Library & Offline | Settings & Themes | iOS Installed |
+| :---: | :---: | :---: | :---: |
+| <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/04.jpg" width="180" alt="Instant Search"/> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/05.jpg" width="180" alt="Music Library"/> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/06.jpg" width="180" alt="Settings & Themes"/> | <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/07.jpg" width="180" alt="iOS Installed"/> |
+
+</div>
+
 
 
 ---
