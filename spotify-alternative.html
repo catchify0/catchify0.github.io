@@ -132,7 +132,7 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" as="style" />
     <link href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="style.css?v=20260914f" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=20260914g" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800;900&display=swap" rel="stylesheet" />
@@ -140,9 +140,9 @@
 
   <body class="light article-page">
     <nav id="navigation-bar">
-      <header class="catchify-nav-logo">
+      <div class="catchify-nav-logo">
         <a href="index.html" class="nav-brand-link">
-          <img class="large catchify-logo" src="assets/logo.png" alt="Catchify logo" width="48" height="48" />
+          <img class="catchify-logo" src="assets/logo.png" alt="Catchify logo" width="44" height="44" />
           <span class="nav-brand-name">Catchify</span>
         </a>
         <button
@@ -156,7 +156,7 @@
           <span class="hamburger-bar"></span>
           <span class="hamburger-bar"></span>
         </button>
-      </header>
+      </div>
       <a href="index.html#hero">
         <i>home</i>
         <span>Home</span>
@@ -205,10 +205,10 @@
             <p>Download Catchify for Android (APK) or iOS (IPA) right now. No subscription. No credit card. Ever.</p>
           </div>
           <div class="hero-actions">
-            <a href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk" class="platform-btn btn-android" download="catchify-v2.4.1.apk">
+            <a data-download-link="android" href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk" class="platform-btn btn-android" download="catchify-v2.4.1.apk">
               <span>Download APK</span>
             </a>
-            <a href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa" class="platform-btn btn-ios" download="Catchify-v2.4.1.ipa">
+            <a data-download-link="ios" href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa" class="platform-btn btn-ios" download="Catchify-v2.4.1.ipa">
               <span>Download IPA</span>
             </a>
           </div>
@@ -294,32 +294,32 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>Price</strong></td>
+                  <th scope="row" class="row-header">Price</th>
                   <td class="td-highlight"><span class="badge-win">Free Forever</span></td>
                   <td>$10.99/mo for Ad-Free</td>
                 </tr>
                 <tr>
-                  <td><strong>Audio Ads</strong></td>
+                  <th scope="row" class="row-header">Audio Ads</th>
                   <td class="td-highlight"><span class="badge-win">0 Ads</span></td>
                   <td>Disruptive audio ads every 2-3 tracks</td>
                 </tr>
                 <tr>
-                  <td><strong>Offline Playback</strong></td>
+                  <th scope="row" class="row-header">Offline Playback</th>
                   <td class="td-highlight"><span class="badge-win">Unlimited Free</span></td>
                   <td><span class="badge-no">❌ Premium Only</span></td>
                 </tr>
                 <tr>
-                  <td><strong>Playback Mode</strong></td>
+                  <th scope="row" class="row-header">Playback Mode</th>
                   <td class="td-highlight"><span class="badge-win">On-Demand</span></td>
                   <td><span class="badge-warn">⚠️ Forced Shuffle</span></td>
                 </tr>
                 <tr>
-                  <td><strong>Live Lyrics</strong></td>
+                  <th scope="row" class="row-header">Live Lyrics</th>
                   <td class="td-highlight"><span class="badge-win">Included Free</span></td>
                   <td>Restricted / Paywalled</td>
                 </tr>
                 <tr>
-                  <td><strong>Equalizer Presets</strong></td>
+                  <th scope="row" class="row-header">Equalizer Presets</th>
                   <td class="td-highlight"><span class="badge-win">10-Band + Presets</span></td>
                   <td>Basic 6-band</td>
                 </tr>
@@ -356,10 +356,10 @@
           <h2>Ready to switch to the #1 free music streaming app?</h2>
           <p>Join thousands of happy listeners enjoying ad-free music across Android and iOS.</p>
           <div class="hero-actions">
-            <a href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk" class="platform-btn btn-android" download="catchify-v2.4.1.apk">
+            <a data-download-link="android" href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk" class="platform-btn btn-android" download="catchify-v2.4.1.apk">
               <span>Download Android (.apk)</span>
             </a>
-            <a href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa" class="platform-btn btn-ios" download="Catchify-v2.4.1.ipa">
+            <a data-download-link="ios" href="https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa" class="platform-btn btn-ios" download="Catchify-v2.4.1.ipa">
               <span>Download iOS (.ipa)</span>
             </a>
           </div>
@@ -380,5 +380,5 @@
       </footer>
     </main>
   </body>
-  <script type="text/javascript" src="assets/js/script.js?v=20260914b" defer></script>
+  <script type="text/javascript" src="assets/js/script.js?v=20260914g" defer></script>
 </html>

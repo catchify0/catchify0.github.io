@@ -281,6 +281,9 @@ function parseChangelog(text) {
     }
   });
 
+  const downloadLinkElement = document.querySelector("[data-download-link='android']");
+  const iosDownloadLinkElement = document.querySelector("[data-download-link='ios']");
+  const versionElement = document.getElementById("download-version");
   const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
   const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
   const verText = (versionElement && versionElement.textContent && versionElement.textContent.trim()) || "v2.4.1";
