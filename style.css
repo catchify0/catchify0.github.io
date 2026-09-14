@@ -160,23 +160,37 @@ main {
   pointer-events: auto;
 }
 
-/* Desktop Navigation Rail (> 992px) */
+/* Desktop Navigation Rail (> 992px) - FIXED SIDEBAR */
 @media only screen and (min-width: 993px) {
+  html {
+    scroll-padding-top: 24px;
+  }
+
+  body:has(> main),
+  body {
+    display: block;
+    padding-left: 80px;
+  }
+
   #navigation-bar {
-    grid-area: left;
-    position: sticky;
+    grid-area: unset;
+    position: fixed;
     top: 0;
     left: 0;
+    bottom: 0;
+    height: 100vh;
     height: 100dvh;
+    width: 80px;
     min-width: 80px;
-    max-width: 84px;
+    max-width: 80px;
     background: var(--surface);
     border-right: 1px solid var(--outline-variant);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1.25rem 0.25rem;
-    z-index: 100;
+    z-index: 1000;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
   }
 
   .catchify-nav-logo {
@@ -235,22 +249,29 @@ main {
   }
 }
 
-/* Tablet & Mobile Navigation Topbar (<= 992px) */
+/* Tablet & Mobile Navigation Topbar (<= 992px) - FIXED TOPBAR */
 @media only screen and (max-width: 992px) {
-  body:has(> main) {
-    display: flex;
-    flex-direction: column;
+  html {
+    scroll-padding-top: 76px;
+  }
+
+  body:has(> main),
+  body {
+    display: block;
+    padding-top: 60px;
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
   }
 
   #navigation-bar {
     grid-area: unset;
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
     min-height: 60px;
-    z-index: 999;
+    z-index: 1000;
     display: flex;
     flex-direction: column;
     background: rgba(255, 251, 234, 0.96);
@@ -258,7 +279,16 @@ main {
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--outline-variant);
     padding: 0;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  #navigation-bar.nav-open {
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid var(--outline-variant);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
   .catchify-nav-logo {
@@ -291,11 +321,6 @@ main {
 
   #navigation-bar > a {
     display: none;
-  }
-
-  #navigation-bar.nav-open {
-    border-bottom: 1px solid var(--outline-variant);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   }
 
   #navigation-bar.nav-open > a {
