@@ -2,7 +2,7 @@ name: Update Project Stats
 
 on:
   schedule:
-    - cron: "0 * * * *" # Every hour
+    - cron: "*/5 * * * *" # Every 5 minutes (GitHub Actions minimum)
   workflow_dispatch: # Allow manual trigger
   push:
     branches:
