@@ -336,8 +336,21 @@ main {
   letter-spacing: 0.05em;
 }
 
-.stat-card img {
-  height: 24px;
+.stat-value-link {
+  text-decoration: none;
+}
+
+.stat-value {
+  display: inline-block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  transition: opacity 0.3s ease;
+}
+
+.stat-value-link:hover .stat-value {
+  opacity: 0.75;
 }
 
 /* Features Section */

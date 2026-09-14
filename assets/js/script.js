@@ -2,6 +2,8 @@ const RELEASES_API =
   "https://api.github.com/repos/thamodharangm/catchify/releases/latest";
 const IOS_RELEASES_API =
   "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
+const REPO_API = "https://api.github.com/repos/thamodharangm/catchify";
+const ALL_RELEASES_API = "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100";
 const FEATURES_URL = "assets/features.txt";
 
 const changelogElement = document.getElementById("changelog_element");
@@ -49,6 +51,7 @@ window.onload = function () {
   setupNavToggle();
   fetchLatestRelease();
   fetchAppFeatures(FEATURES_URL);
+  fetchProjectStats();
 };
 
 function fetchLatestRelease() {
@@ -125,6 +128,51 @@ function fetchLatestRelease() {
       showChangelogFallback();
       fetchIosFallbackRelease();
     },
+  );
+}
+
+function formatNumber(n) {
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+  return String(n);
+}
+
+function fetchProjectStats() {
+  // Fetch stars & forks
+  makeHttpRequest(
+    REPO_API,
+    (res) => {
+      try {
+        const repo = JSON.parse(res);
+        const starsEl = document.getElementById("stat-stars");
+        const forksEl = document.getElementById("stat-forks");
+        if (starsEl) starsEl.textContent = formatNumber(repo.stargazers_count || 0);
+        if (forksEl) forksEl.textContent = formatNumber(repo.forks_count || 0);
+      } catch (e) {
+        console.warn("Could not load repo stats:", e);
+      }
+    },
+    () => {},
+  );
+
+  // Fetch total downloads across all releases
+  makeHttpRequest(
+    ALL_RELEASES_API,
+    (res) => {
+      try {
+        const releases = JSON.parse(res);
+        let total = 0;
+        releases.forEach((release) => {
+          (release.assets || []).forEach((asset) => {
+            total += asset.download_count || 0;
+          });
+        });
+        const downloadsEl = document.getElementById("stat-downloads");
+        if (downloadsEl) downloadsEl.textContent = formatNumber(total);
+      } catch (e) {
+        console.warn("Could not load download stats:", e);
+      }
+    },
+    () => {},
   );
 }
 
