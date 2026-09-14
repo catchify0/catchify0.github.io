@@ -1,5 +1,7 @@
 const RELEASES_API =
   "https://api.github.com/repos/thamodharangm/catchify/releases/latest";
+const IOS_RELEASES_API =
+  "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
 const FEATURES_URL = "assets/features.txt";
 
 const changelogElement = document.getElementById("changelog_element");
@@ -53,7 +55,8 @@ function fetchLatestRelease() {
       try {
         const release = JSON.parse(res);
 
-        let asset = (release.assets || []).find(
+        // 1. Android Asset Selection (.apk)
+        let apkAsset = (release.assets || []).find(
           (a) =>
             a.name.endsWith(".apk") &&
             !a.name.includes("arm64") &&
@@ -61,19 +64,46 @@ function fetchLatestRelease() {
             !a.name.includes("debug"),
         );
 
-        if (!asset) {
-          asset = (release.assets || []).find((a) => a.name.endsWith(".apk"));
+        if (!apkAsset) {
+          apkAsset = (release.assets || []).find((a) => a.name.endsWith(".apk"));
         }
 
-        if (asset) {
-          document.querySelectorAll("[data-download-link]").forEach((el) => {
-            el.setAttribute("href", asset.browser_download_url);
+        if (apkAsset) {
+          document.querySelectorAll("[data-download-link], [data-download-link='android']").forEach((el) => {
+            el.setAttribute("href", apkAsset.browser_download_url);
           });
         }
 
+        // 2. iOS Asset Selection (.ipa or .zip)
+        let iosAsset = (release.assets || []).find(
+          (a) =>
+            a.name.endsWith(".ipa") ||
+            (a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip")),
+        );
+
+        if (iosAsset) {
+          document.querySelectorAll("[data-download-link='ios']").forEach((el) => {
+            el.setAttribute("href", iosAsset.browser_download_url);
+          });
+        } else {
+          // If iOS asset is not in the central repo release yet, check ios-catchify fallback
+          fetchIosFallbackRelease();
+        }
+
+        const versionStr = release.tag_name ? "v" + release.tag_name.replace(/^v/, "") : "";
         const versionEl = document.getElementById("download-version");
-        if (versionEl && release.tag_name) {
-          versionEl.textContent = "v" + release.tag_name.replace(/^v/, "");
+        if (versionEl && versionStr) {
+          versionEl.textContent = versionStr;
+        }
+
+        const versionAndroidEl = document.getElementById("download-version-android");
+        if (versionAndroidEl && versionStr) {
+          versionAndroidEl.textContent = versionStr;
+        }
+
+        const versionIosEl = document.getElementById("download-version-ios");
+        if (versionIosEl && versionStr && iosAsset) {
+          versionIosEl.textContent = versionStr;
         }
 
         if (release.body) {
@@ -84,9 +114,41 @@ function fetchLatestRelease() {
       } catch (error) {
         console.error("Error fetching latest Catchify release:", error);
         showChangelogFallback();
+        fetchIosFallbackRelease();
       }
     },
-    showChangelogFallback,
+    () => {
+      showChangelogFallback();
+      fetchIosFallbackRelease();
+    },
+  );
+}
+
+function fetchIosFallbackRelease() {
+  makeHttpRequest(
+    IOS_RELEASES_API,
+    (res) => {
+      try {
+        const release = JSON.parse(res);
+        const iosAsset = (release.assets || []).find(
+          (a) =>
+            a.name.endsWith(".ipa") ||
+            (a.name.toLowerCase().includes("ios") && a.name.endsWith(".zip")),
+        );
+        if (iosAsset) {
+          document.querySelectorAll("[data-download-link='ios']").forEach((el) => {
+            el.setAttribute("href", iosAsset.browser_download_url);
+          });
+        }
+        const versionIosEl = document.getElementById("download-version-ios");
+        if (versionIosEl && release.tag_name) {
+          versionIosEl.textContent = "v" + release.tag_name.replace(/^v/, "").replace(/-ios$/, "");
+        }
+      } catch (e) {
+        console.warn("Could not load iOS fallback release:", e);
+      }
+    },
+    () => {},
   );
 }
 
@@ -110,7 +172,7 @@ const FEATURE_ICONS = [
 ];
 
 const FALLBACK_FEATURES = [
-  "No ads, no subscriptions, no hidden costs â€” completely free to use",
+  "No ads, no subscriptions, no hidden costs — completely free to use",
   "Download songs and playlists to listen anywhere, even offline",
   "Create custom playlists, import them via link, and organize them into folders",
   "Fine-tune your sound with an adjustable equalizer and ready-made presets",
@@ -174,7 +236,7 @@ function parseChangelog(text) {
       hasBullet = true;
       const processedText = itemMatch[1].replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
       const listItem = document.createElement("p");
-      listItem.innerHTML = `â€¢ ${processedText}`;
+      listItem.innerHTML = `• ${processedText}`;
       changelogElement.appendChild(listItem);
     }
   });

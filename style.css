@@ -652,3 +652,70 @@ main {
     max-height: 380px;
   }
 }
+
+
+/* iOS Button & Guide Styling */
+.hero-actions button.ios-btn {
+  background: var(--surface-container-highest, #2c2b30);
+  color: var(--on-surface, #ffffff);
+  border: 1px solid var(--outline-variant, rgba(255, 255, 255, 0.2));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.hero-actions button.ios-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.hero-ios-note {
+  margin-top: 0.9rem;
+  font-size: 0.92rem;
+}
+
+.hero-ios-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.hero-ios-note a:hover {
+  text-decoration: underline;
+}
+
+.ios-install-content {
+  margin-top: 0.75rem;
+}
+
+.ios-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.ios-method-box {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--outline-variant);
+}
+
+.ios-method-box h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--primary);
+}
+
+.ios-method-box ol, .ios-method-box ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.6;
+}
+
+.ios-method-box li {
+  margin-bottom: 0.4rem;
+}

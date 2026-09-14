@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -10,7 +10,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
     <meta
       name="description"
-      content="Catchify is a 100% free, ad-free music streaming app for Android — the best Spotify alternative and JioSaavn alternative with offline downloads, custom playlists, equalizer, lyrics, and 21+ language support including Tamil, Hindi, Telugu &amp; more. No subscription. No ads. Ever."
+      content="Catchify is a 100% free, ad-free music streaming app for Android & iOS — the best Spotify alternative and JioSaavn alternative with offline downloads, custom playlists, equalizer, lyrics, and 21+ language support including Tamil, Hindi, Telugu &amp; more. No subscription. No ads. Ever."
     />
     <meta
       name="keywords"
@@ -38,7 +38,7 @@
     />
     <meta
       property="og:description"
-      content="100% free, ad-free music streaming for Android. The best Spotify &amp; JioSaavn alternative — offline downloads, custom playlists, equalizer, lyrics, 21+ language support. No subscription ever."
+      content="100% free, ad-free music streaming for Android & iOS. The best Spotify &amp; JioSaavn alternative — offline downloads, custom playlists, equalizer, lyrics, 21+ language support. No subscription ever."
     />
     <meta
       property="og:image"
@@ -58,7 +58,7 @@
     />
     <meta
       name="twitter:description"
-      content="100% free, ad-free music for Android. Best Spotify &amp; JioSaavn alternative — offline downloads, equalizer, lyrics, 21+ languages. No subscription ever."
+      content="100% free, ad-free music for Android & iOS. Best Spotify &amp; JioSaavn alternative — offline downloads, equalizer, lyrics, 21+ languages. No subscription ever."
     />
     <meta
       name="twitter:image"
@@ -80,7 +80,7 @@
         ],
         "url": "https://catchify.textmateai.online/",
         "image": "https://thamodharangm.github.io/catchify/assets/logo.png",
-        "operatingSystem": "Android 5.0+",
+        "operatingSystem": "Android 5.0+, iOS 14.0+",
         "applicationCategory": "MusicApplication",
         "description": "Catchify is a 100% free, ad-free music streaming and offline download app for Android. It is a free alternative to Spotify, JioSaavn, YouTube Music, Gaana, and Wynk Music — with no subscription, no ads, offline playback, custom playlists, an equalizer, synced lyrics, and support for 21+ languages including Tamil, Hindi, and Telugu.",
         "keywords": "free music app, Spotify alternative, JioSaavn alternative, offline music player, ad-free music, Tamil music, Hindi music, Telugu music, no subscription music",
@@ -333,16 +333,22 @@
               alt="Catchify app logo — a stylized C and music note"
             />
           </div>
-          <h1 class="hero-title">Catchify</h1>
+                    <h1 class="hero-title">Catchify</h1>
           <p class="hero-subtitle">
-            The free, ad-free Spotify &amp; JioSaavn alternative for Android — offline
+            The free, ad-free Spotify &amp; JioSaavn alternative for Android &amp; iOS — offline
             listening, custom playlists, equalizer, lyrics &amp; 21+ languages. No subscription. No ads. Ever.
           </p>
           <div class="hero-actions">
-            <a data-download-link href="https://github.com/thamodharangm/catchify/releases/latest">
+            <a data-download-link="android" data-download-link href="https://github.com/thamodharangm/catchify/releases/latest">
               <button class="large round">
-                <i>download</i>
-                <span>Download <span id="download-version"></span></span>
+                <i>android</i>
+                <span>Download Android (.apk) <span id="download-version-android"></span></span>
+              </button>
+            </a>
+            <a data-download-link="ios" href="https://github.com/thamodharangm/catchify/releases/latest">
+              <button class="large round ios-btn">
+                <i>apple</i>
+                <span>Download iOS (.ipa) <span id="download-version-ios"></span></span>
               </button>
             </a>
             <a href="https://github.com/thamodharangm/catchify">
@@ -352,6 +358,12 @@
               </button>
             </a>
           </div>
+          <p class="hero-ios-note">
+            <a href="#ios-guide">
+              <i>help_outline</i>
+              <span>How to install on iPhone using Sideloadly / AltStore</span>
+            </a>
+          </p>
         </div>
       </section>
 
@@ -516,9 +528,35 @@
             <summary>Is Catchify open source?</summary>
             <p>Yes. Catchify is fully open-source. The source code is available on <a href="https://github.com/thamodharangm/catchify">GitHub</a>.</p>
           </details>
-          <details>
-            <summary>How do I install Catchify?</summary>
-            <p>Tap the <a data-download-link href="https://github.com/thamodharangm/catchify/releases/latest">Download</a> button on this page — the APK downloads directly. Open it on your Android device and allow installation from unknown sources if prompted.</p>
+                    <details>
+            <summary>How do I install Catchify on Android?</summary>
+            <p>Tap the <a data-download-link="android" href="https://github.com/thamodharangm/catchify/releases/latest">Download Android (.apk)</a> button on this page — the APK downloads directly. Open it on your Android device and allow installation from unknown sources if prompted.</p>
+          </details>
+          <details id="ios-guide">
+            <summary>How do I install Catchify on iOS (iPhone / iPad)?</summary>
+            <div class="ios-install-content">
+              <p>Since Catchify is open-source and free without App Store restrictions, you can sideload it in minutes using <strong>Sideloadly</strong>, <strong>AltStore</strong>, or <strong>TrollStore</strong>:</p>
+              <div class="ios-methods-grid">
+                <div class="ios-method-box">
+                  <h4>Method 1: Sideloadly (Recommended for PC &amp; Mac)</h4>
+                  <ol>
+                    <li>Download &amp; install Sideloadly from <a href="https://sideloadly.io" target="_blank" rel="noopener">sideloadly.io</a>.</li>
+                    <li>Connect your iPhone to your PC/Mac via USB.</li>
+                    <li>Drag and drop the downloaded <strong>Catchify.ipa</strong> into Sideloadly.</li>
+                    <li>Enter your Apple ID email and click <strong>Start</strong>.</li>
+                    <li>On your iPhone: Go to <strong>Settings &gt; General &gt; VPN &amp; Device Management</strong> and tap <em>Trust</em> on your Apple ID.</li>
+                    <li>On iOS 16+: Go to <strong>Settings &gt; Privacy &amp; Security &gt; Developer Mode</strong> and turn it ON.</li>
+                  </ol>
+                </div>
+                <div class="ios-method-box">
+                  <h4>Method 2: AltStore / TrollStore</h4>
+                  <ul>
+                    <li><strong>AltStore:</strong> Open AltServer on your PC or Mac and sideload <code>Catchify.ipa</code> directly.</li>
+                    <li><strong>TrollStore:</strong> For devices on compatible iOS versions (iOS 14.0 – 16.6.1 / 17.0), open the IPA file with TrollStore for permanent installation without any 7-day expiration!</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </details>
           <details>
             <summary>Who made Catchify?</summary>
