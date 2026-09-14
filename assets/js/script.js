@@ -26,6 +26,7 @@ function makeHttpRequest(url, callback, onError) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  loadGitHubStats();
   new Splide("#screenshot-carousel", {
     type: "loop",
     perPage: 3,
@@ -282,4 +283,50 @@ function setupNavToggle() {
       toggle.setAttribute("aria-expanded", "false");
     });
   });
+}
+
+// Fetch Live GitHub Statistics (Stars, Forks, Total Downloads)
+function loadGitHubStats() {
+  const starsEl = document.getElementById("stats-stars");
+  const forksEl = document.getElementById("stats-forks");
+  const downloadsEl = document.getElementById("stats-downloads");
+
+  // 1. Fetch Repository Info (Stars, Forks)
+  fetch("https://api.github.com/repos/thamodharangm/catchify")
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) {
+      if (data) {
+        if (starsEl && typeof data.stargazers_count === "number") {
+          starsEl.textContent = data.stargazers_count.toLocaleString();
+        }
+        if (forksEl && typeof data.forks_count === "number") {
+          forksEl.textContent = data.forks_count.toLocaleString();
+        }
+      }
+    })
+    .catch(function (err) {
+      console.warn("Could not load repo stats:", err);
+    });
+
+  // 2. Fetch Release Assets (Downloads)
+  fetch("https://api.github.com/repos/thamodharangm/catchify/releases")
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (releases) {
+      if (Array.isArray(releases)) {
+        let total = 0;
+        releases.forEach(function (rel) {
+          if (Array.isArray(rel.assets)) {
+            rel.assets.forEach(function (asset) {
+              total += asset.download_count || 0;
+            });
+          }
+        });
+        if (downloadsEl && total > 0) {
+          downloadsEl.textContent = total.toLocaleString() + "+";
+        }
+      }
+    })
+    .catch(function (err) {
+      console.warn("Could not load release stats:", err);
+    });
 }

@@ -5,11 +5,11 @@
 
 Unlock the full potential of music: Stream effortlessly with one app!
 
-[![Stars](https://img.shields.io/github/stars/thamodharangm/catchify?style=flat-square&color=D3BEAB)](https://github.com/thamodharangm/catchify/stargazers)
-[![Forks](https://img.shields.io/github/forks/thamodharangm/catchify?style=flat-square&color=D3BEAB)](https://github.com/thamodharangm/catchify/fork)
-[![Downloads](https://img.shields.io/github/downloads/thamodharangm/catchify/total?style=flat-square&color=D3BEAB)](https://github.com/thamodharangm/catchify/releases)
-[![GitHub release](https://img.shields.io/github/v/release/thamodharangm/catchify?color=D3BEAB)](https://github.com/thamodharangm/catchify/releases)
-[![License](https://img.shields.io/github/license/thamodharangm/catchify?color=D3BEAB)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/thamodharangm/catchify?style=flat-square&color=a855f7&label=Stars)](https://github.com/thamodharangm/catchify/stargazers)
+[![Forks](https://img.shields.io/github/forks/thamodharangm/catchify?style=flat-square&color=a855f7&label=Forks)](https://github.com/thamodharangm/catchify/fork)
+[![Downloads](https://img.shields.io/github/downloads/thamodharangm/catchify/total?style=flat-square&color=a855f7&label=Downloads)](https://github.com/thamodharangm/catchify/releases)
+[![Release](https://img.shields.io/github/v/release/thamodharangm/catchify?style=flat-square&color=a855f7&label=Release)](https://github.com/thamodharangm/catchify/releases)
+[![License](https://img.shields.io/github/license/thamodharangm/catchify?style=flat-square&color=a855f7&label=License)](LICENSE)
 
 ---
 
