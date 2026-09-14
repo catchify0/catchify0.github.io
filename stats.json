@@ -7,5 +7,5 @@
   "version": "v2.4.1",
   "apk_url": "https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk",
   "ipa_url": "https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa",
-  "changelog": "Update: v2.4.1 - release catchify for Android"
+  "changelog": "• Cross-Platform Release: Catchify is now available for both Android (APK) and iOS (IPA)\n• Synced Live Lyrics: Real-time streaming synchronized lyrics alongside playback\n• Spotify Playlist Import: Import any public Spotify playlist directly via share link\n• Offline Audio: High-quality offline song and playlist downloads with zero ads\n• Equalizer & Audio FX: Customizable equalizer with bass boost presets\n• 21+ Languages: Localized interface and curated music in Tamil, Hindi, Telugu, and more"
 }
