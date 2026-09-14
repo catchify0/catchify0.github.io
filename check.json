@@ -3,8 +3,8 @@
   "announcementurl": null,
   "url": "https://github.com/thamodharangm/catchify/releases/download/2.4.0/catchify-v2.4.0.apk",
   "arm64url": "https://github.com/thamodharangm/catchify/releases/download/2.4.0/catchify-v2.4.0-arm64-v8a.apk",
-  "iosurl": "https://github.com/thamodharangm/catchify/releases/download/2.4.0/Catchify-v2.4.0.ipa",
-  "ioszipurl": "https://github.com/thamodharangm/catchify/releases/download/2.4.0/Catchify-v2.4.0-iOS.zip",
+  "iosurl": "https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1.ipa",
+  "ioszipurl": "https://github.com/thamodharangm/catchify/releases/download/2.4.1/Catchify-v2.4.1-iOS.zip",
   "stats": {
     "stars": 1,
     "forks": 0,
