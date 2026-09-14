@@ -3,6 +3,7 @@ const RELEASES_API =
 const IOS_RELEASES_API =
   "https://api.github.com/repos/thamodharangm/ios-catchify/releases/latest";
 const REPO_API = "https://api.github.com/repos/thamodharangm/catchify";
+const ALL_RELEASES_API = "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100";
 const FEATURES_URL = "assets/features.txt";
 
 const changelogElement = document.getElementById("changelog_element");
@@ -118,15 +119,7 @@ function fetchLatestRelease() {
           showChangelogFallback();
         }
 
-        // Populate downloads stat from latest release assets
-        const downloadsEl = document.getElementById("stat-downloads");
-        if (downloadsEl) {
-          const latestDownloads = (release.assets || []).reduce(
-            (sum, a) => sum + (a.download_count || 0),
-            0,
-          );
-          downloadsEl.textContent = formatNumber(latestDownloads);
-        }
+        // Remove latest-release download count (now handled by ALL_RELEASES_API in fetchProjectStats)
       } catch (error) {
         console.error("Error fetching latest Catchify release:", error);
         showChangelogFallback();
@@ -146,7 +139,7 @@ function formatNumber(n) {
 }
 
 function fetchProjectStats() {
-  // Fetch stars & forks only (downloads come from fetchLatestRelease)
+  // Fetch stars & forks
   makeHttpRequest(
     REPO_API,
     (res) => {
@@ -158,6 +151,27 @@ function fetchProjectStats() {
         if (forksEl) forksEl.textContent = formatNumber(repo.forks_count || 0);
       } catch (e) {
         console.warn("Could not load repo stats:", e);
+      }
+    },
+    () => {},
+  );
+
+  // Fetch total downloads across ALL releases
+  makeHttpRequest(
+    ALL_RELEASES_API,
+    (res) => {
+      try {
+        const releases = JSON.parse(res);
+        let total = 0;
+        releases.forEach((release) => {
+          (release.assets || []).forEach((asset) => {
+            total += asset.download_count || 0;
+          });
+        });
+        const downloadsEl = document.getElementById("stat-downloads");
+        if (downloadsEl) downloadsEl.textContent = formatNumber(total);
+      } catch (e) {
+        console.warn("Could not load download stats:", e);
       }
     },
     () => {},
