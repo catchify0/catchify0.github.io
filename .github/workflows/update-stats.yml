@@ -22,7 +22,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Fetch repo info - no auth (public repo, avoids token masking issues)
+          # Fetch repo info (public API)
           REPO=$(curl -s \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -30,38 +30,96 @@ jobs:
 
           STARS=$(echo "$REPO" | python3 -c "
           import json, sys
-          d = json.load(sys.stdin)
-          # stargazers_count and watchers_count are the same for stars
-          print(d.get('stargazers_count') or d.get('watchers_count') or 0)
+          try:
+              d = json.load(sys.stdin)
+              print(d.get('stargazers_count') or d.get('watchers_count') or 0)
+          except:
+              print(1)
           ")
           FORKS=$(echo "$REPO" | python3 -c "
           import json, sys
-          d = json.load(sys.stdin)
-          print(d.get('forks_count') or d.get('forks') or 0)
+          try:
+              d = json.load(sys.stdin)
+              print(d.get('forks_count') or d.get('forks') or 0)
+          except:
+              print(0)
           ")
           echo "Stars: $STARS | Forks: $FORKS"
 
-          # Fetch all releases (authenticated to handle rate limits)
-          RELEASES=$(curl -s \
+          # Fetch all releases (authenticated with GH_TOKEN)
+          curl -s \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100")
+            "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100" > /tmp/releases.json
 
-          DOWNLOADS=$(echo "$RELEASES" | python3 -c "
-          import json, sys
-          releases = json.load(sys.stdin)
-          total = sum(
-              asset.get('download_count', 0)
-              for release in releases
-              for asset in release.get('assets', [])
-          )
-          print(total)
-          ")
-          echo "Downloads: $DOWNLOADS"
+          STARS=$STARS FORKS=$FORKS python3 -c "
+          import json, sys, os
 
-          # Write stats.json
-          echo "{\"stars\": $STARS, \"forks\": $FORKS, \"downloads\": $DOWNLOADS}" > stats.json
+          try:
+              with open('/tmp/releases.json', 'r', encoding='utf-8') as f:
+                  releases = json.load(f)
+          except Exception as e:
+              print('Failed to parse releases:', e)
+              releases = []
+
+          total_downloads = 0
+          apk_downloads = 0
+          ipa_downloads = 0
+
+          if isinstance(releases, list):
+              for r in releases:
+                  for a in r.get('assets', []):
+                      name = a.get('name', '').lower()
+                      cnt = a.get('download_count', 0)
+                      total_downloads += cnt
+                      if name.endswith('.apk'):
+                          apk_downloads += cnt
+                      elif name.endswith('.ipa') or '.ipa' in name:
+                          ipa_downloads += cnt
+
+          latest = releases[0] if isinstance(releases, list) and len(releases) > 0 else {}
+          version = latest.get('tag_name', 'v2.4.0')
+          body = latest.get('body', '')
+
+          apk_url = 'https://github.com/thamodharangm/catchify/releases/download/2.4.0/catchify-v2.4.0.apk'
+          ipa_url = 'https://github.com/thamodharangm/catchify/releases/download/2.4.0/Catchify-v2.4.0.ipa'
+
+          for a in latest.get('assets', []):
+              name = a.get('name', '').lower()
+              url = a.get('browser_download_url', '')
+              if name.endswith('.apk') and 'arm64' not in name:
+                  apk_url = url
+              elif name.endswith('.ipa'):
+                  ipa_url = url
+
+          try:
+              stars = int(os.environ.get('STARS', '1'))
+          except:
+              stars = 1
+          try:
+              forks = int(os.environ.get('FORKS', '0'))
+          except:
+              forks = 0
+
+          stats = {
+              'stars': stars,
+              'forks': forks,
+              'downloads': total_downloads,
+              'apk_downloads': apk_downloads,
+              'ipa_downloads': ipa_downloads,
+              'version': version if str(version).startswith('v') else f'v{version}',
+              'apk_url': apk_url,
+              'ipa_url': ipa_url,
+              'changelog': body
+          }
+
+          with open('stats.json', 'w', encoding='utf-8') as f:
+              json.dump(stats, f, indent=2, ensure_ascii=False)
+
+          print(f'Successfully updated stats.json: Total={total_downloads}, APK={apk_downloads}, IPA={ipa_downloads}')
+          "
+
           echo "Written stats.json:"
           cat stats.json
 

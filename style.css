@@ -353,6 +353,15 @@ main {
   opacity: 0.75;
 }
 
+.stat-subtext {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  margin-top: 0.25rem;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
 /* Features Section */
 .features-section {
   background: var(--surface-container-low);
