@@ -443,16 +443,24 @@ main {
   font-weight: 900;
   color: var(--primary);
   line-height: 1.15;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.4rem;
   letter-spacing: -0.02em;
 }
 
-.hero-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+.hero-tagline {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 700;
   color: var(--on-surface);
+  margin: 0 auto 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.92rem, 2vw, 1.05rem);
+  color: var(--on-surface-variant);
   margin: 0 auto 1.5rem;
   font-weight: 500;
-  max-width: 620px;
+  max-width: 640px;
   line-height: 1.6;
 }
 
