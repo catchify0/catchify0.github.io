@@ -22,14 +22,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Fetch repo info (stars, forks)
-          REPO=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
-            "https://api.github.com/repos/thamodharangm/catchify")
+          # Fetch repo info (stars, forks) - public endpoint, no auth needed
+          REPO=$(curl -s "https://api.github.com/repos/thamodharangm/catchify")
 
-          STARS=$(echo "$REPO" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['stargazers_count'])")
-          FORKS=$(echo "$REPO" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['forks_count'])")
+          STARS=$(echo "$REPO" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('stargazers_count', 0))")
+          FORKS=$(echo "$REPO" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('forks_count', 0))")
+          echo "Stars: $STARS, Forks: $FORKS"
 
-          # Fetch all releases and sum download_count
+          # Fetch all releases (authenticated to avoid rate limits)
           RELEASES=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100")
 
@@ -43,10 +43,11 @@ jobs:
           )
           print(total)
           ")
+          echo "Downloads: $DOWNLOADS"
 
           # Write stats.json
           echo "{\"stars\": $STARS, \"forks\": $FORKS, \"downloads\": $DOWNLOADS}" > stats.json
-          echo "Stats: stars=$STARS forks=$FORKS downloads=$DOWNLOADS"
+          cat stats.json
 
       - name: Commit and push if changed
         run: |
