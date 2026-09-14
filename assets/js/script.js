@@ -48,12 +48,10 @@ window.onload = function () {
   assignNavClass();
   window.addEventListener("resize", assignNavClass);
   setupNavToggle();
-  // 1. Instant loading: fetch stats.json (immune to GitHub API rate limits)
+  // 1. Instant loading: fetch stats.json (hosted on same domain, zero API rate limits)
   fetchProjectStats();
   // 2. Fetch features list
   fetchAppFeatures(FEATURES_URL);
-  // 3. Background check for fresh GitHub API data (if not rate limited)
-  fetchLatestRelease();
 };
 
 function formatNumber(n) {
