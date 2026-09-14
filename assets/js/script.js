@@ -239,29 +239,113 @@ function fetchLatestRelease() {
 
 function parseChangelog(text) {
   if (!changelogElement || !text) return;
-  const lines = text.split(/\r?\n/).filter((line) => line.trim() !== "");
-  let items = [];
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+
+  let currentTarget = null;
+  const androidItems = [];
+  const iosItems = [];
+  const generalItems = [];
 
   lines.forEach((line) => {
-    const itemMatch = line.match(/^\*\s+(.+)$/);
-    if (itemMatch) {
-      const processedText = itemMatch[1].replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
-      items.push(processedText);
+    if (/^[-*_]{3,}$/.test(line)) return;
+
+    if (/android/i.test(line) && /(release|v2|features|update)/i.test(line)) {
+      currentTarget = "android";
+      return;
+    }
+    if (/ios/i.test(line) && /(release|v2|features|update)/i.test(line)) {
+      currentTarget = "ios";
+      return;
+    }
+    if (/^#+\s*(what's\s*new|downloads)/i.test(line)) {
+      return;
+    }
+    if (/^[-*•+]\s*\*\*.*(apk|ipa|bundle).*:\*\*/i.test(line)) {
+      return;
+    }
+
+    const bulletMatch = line.match(/^([*\-+•]|\d+\.)\s+(.+)$/);
+    const rawContent = bulletMatch ? bulletMatch[2] : (!line.startsWith("#") ? line : null);
+    if (!rawContent) return;
+
+    const formatted = rawContent
+      .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+      .replace(/`(.+?)`/g, "<code>$1</code>");
+
+    if (currentTarget === "android") {
+      androidItems.push(formatted);
+    } else if (currentTarget === "ios") {
+      iosItems.push(formatted);
+    } else {
+      generalItems.push(formatted);
     }
   });
 
-  if (items.length > 0) {
-    changelogElement.innerHTML = "";
-    items.forEach((item) => {
-      const listItem = document.createElement("p");
-      listItem.innerHTML = `&bull; ${item}`;
-      changelogElement.appendChild(listItem);
-    });
-  } else if (text.trim().length > 0) {
-    changelogElement.innerHTML = "";
-    const paragraph = document.createElement("p");
-    paragraph.innerHTML = text.trim().replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
-    changelogElement.appendChild(paragraph);
+  const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
+  const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
+  const verText = (versionElement && versionElement.textContent && versionElement.textContent.trim()) || "v2.4.1";
+
+  if (androidItems.length > 0 || iosItems.length > 0) {
+    changelogElement.innerHTML = `
+      <div class="changelog-grid">
+        <article class="changelog-platform-card android-card">
+          <div class="changelog-platform-header">
+            <div class="changelog-platform-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993s-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9994.4482.9994.9993s-.4483.9997-.9994.9997m11.4045-6.02l1.997-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.125 12 8.125s-3.5902.2866-5.1365.8247L4.8412 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.152.5676l1.997 3.4592C2.6889 11.1867.3438 14.6586 0 18.75h24c-.3438-4.0914-2.6889-7.5633-6.1185-9.4286"/>
+              </svg>
+              <span>Android Release</span>
+            </div>
+            <span class="changelog-badge">${verText}</span>
+          </div>
+          <ul class="changelog-list">
+            ${androidItems.map((item) => `
+              <li class="changelog-item">
+                <span class="changelog-bullet" aria-hidden="true">&bull;</span>
+                <div class="changelog-text">${item}</div>
+              </li>
+            `).join("")}
+          </ul>
+          <div class="changelog-footer">
+            <a href="${apkUrl}" class="changelog-dl-link"><i>download</i> Download APK</a>
+          </div>
+        </article>
+
+        <article class="changelog-platform-card ios-card">
+          <div class="changelog-platform-header">
+            <div class="changelog-platform-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.64-.78 1.08-1.86.96-2.94-.93.04-2.06.62-2.72 1.4-.58.67-1.09 1.76-.95 2.82 1.04.08 2.07-.5 2.71-1.28z"/>
+              </svg>
+              <span>iOS Release</span>
+            </div>
+            <span class="changelog-badge">${verText}</span>
+          </div>
+          <ul class="changelog-list">
+            ${iosItems.map((item) => `
+              <li class="changelog-item">
+                <span class="changelog-bullet" aria-hidden="true">&bull;</span>
+                <div class="changelog-text">${item}</div>
+              </li>
+            `).join("")}
+          </ul>
+          <div class="changelog-footer">
+            <a href="${ipaUrl}" class="changelog-dl-link"><i>download</i> Download IPA</a>
+          </div>
+        </article>
+      </div>
+    `;
+  } else if (generalItems.length > 0) {
+    changelogElement.innerHTML = `
+      <ul class="changelog-list">
+        ${generalItems.map((item) => `
+          <li class="changelog-item">
+            <span class="changelog-bullet" aria-hidden="true">&bull;</span>
+            <div class="changelog-text">${item}</div>
+          </li>
+        `).join("")}
+      </ul>
+    `;
   }
 }
 

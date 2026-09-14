@@ -1289,12 +1289,170 @@ main {
   border-radius: 20px;
 }
 
+.changelog-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.changelog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 820px) {
+  .changelog-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.changelog-platform-card {
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  border-radius: 20px;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.changelog-platform-card:hover {
+  border-color: rgba(30, 215, 96, 0.4);
+  transform: translateY(-2px);
+}
+
+.changelog-platform-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.changelog-platform-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.changelog-platform-title svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.android-card .changelog-platform-title svg {
+  fill: #3ddc84;
+}
+
+.ios-card .changelog-platform-title svg {
+  fill: #d1d5db;
+}
+
+.changelog-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(30, 215, 96, 0.12);
+  color: var(--primary, #1ed760);
+  border: 1px solid rgba(30, 215, 96, 0.25);
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.changelog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.changelog-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--on-surface);
+}
+
+.changelog-bullet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  background: rgba(30, 215, 96, 0.15);
+  color: var(--primary, #1ed760);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.changelog-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+.changelog-text b,
+.changelog-text strong {
+  color: var(--on-surface);
+  font-weight: 600;
+}
+
+.changelog-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.changelog-dl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--primary, #1ed760);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.changelog-dl-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.changelog-dl-link i {
+  font-size: 1.1rem;
+}
+
 .changelog-card {
   background: var(--surface-container);
   border: 1px solid var(--outline-variant);
-  border-radius: 24px;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  max-width: 720px;
+  border-radius: 20px;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  max-width: 1040px;
   margin: 0 auto;
   text-align: left;
 }
