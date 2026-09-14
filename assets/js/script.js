@@ -285,34 +285,95 @@ function setupNavToggle() {
   });
 }
 
-// Fetch Live GitHub Statistics (Stars, Forks, Total Downloads)
+// Smooth Count Up Animation for Statistics
+function animateCount(element, target, suffix) {
+  if (!element) return;
+  suffix = suffix || "";
+  const start = 0;
+  if (target === 0) {
+    element.textContent = "0" + suffix;
+    return;
+  }
+  const duration = 1100;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const currentVal = Math.round(start + (target - start) * ease);
+    element.textContent = currentVal.toLocaleString() + suffix;
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      element.textContent = target.toLocaleString() + suffix;
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// Fetch Live GitHub Statistics (Stars, Forks, Total Downloads) with Fallbacks & Cache
 function loadGitHubStats() {
   const starsEl = document.getElementById("stats-stars");
   const forksEl = document.getElementById("stats-forks");
   const downloadsEl = document.getElementById("stats-downloads");
 
-  // 1. Fetch Repository Info (Stars, Forks)
-  fetch("https://api.github.com/repos/thamodharangm/catchify")
-    .then(function (res) { return res.ok ? res.json() : null; })
+  // 1. Instant Cache Render from localStorage
+  let cached = null;
+  try {
+    const raw = localStorage.getItem("catchify_stats_cache");
+    if (raw) cached = JSON.parse(raw);
+  } catch (e) {}
+
+  if (cached && typeof cached.stars === "number") {
+    animateCount(starsEl, cached.stars, "");
+    animateCount(forksEl, cached.forks, "");
+    animateCount(downloadsEl, cached.downloads, "+");
+  }
+
+  function saveCache(stars, forks, downloads) {
+    try {
+      const current = cached || {};
+      const updated = {
+        stars: typeof stars === "number" ? stars : (current.stars || 1),
+        forks: typeof forks === "number" ? forks : (current.forks || 0),
+        downloads: typeof downloads === "number" ? downloads : (current.downloads || 89),
+        time: Date.now()
+      };
+      localStorage.setItem("catchify_stats_cache", JSON.stringify(updated));
+    } catch (e) {}
+  }
+
+  // 2. Fetch Live Repo Info (Stars, Forks)
+  fetch("https://api.github.com/repos/thamodharangm/catchify", { cache: "no-store" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("GitHub API status: " + res.status);
+      return res.json();
+    })
     .then(function (data) {
       if (data) {
         if (starsEl && typeof data.stargazers_count === "number") {
-          starsEl.textContent = data.stargazers_count.toLocaleString();
+          animateCount(starsEl, data.stargazers_count, "");
         }
         if (forksEl && typeof data.forks_count === "number") {
-          forksEl.textContent = data.forks_count.toLocaleString();
+          animateCount(forksEl, data.forks_count, "");
         }
+        saveCache(data.stargazers_count, data.forks_count, null);
       }
     })
     .catch(function (err) {
-      console.warn("Could not load repo stats:", err);
+      console.warn("Could not load repo stars/forks from GitHub API, checking check.json fallback:", err);
+      fetchFallbackStats();
     });
 
-  // 2. Fetch Release Assets (Downloads)
-  fetch("https://api.github.com/repos/thamodharangm/catchify/releases")
-    .then(function (res) { return res.ok ? res.json() : null; })
+  // 3. Fetch Live Releases Info (Downloads) across all releases
+  fetch("https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100", { cache: "no-store" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("GitHub Releases status: " + res.status);
+      return res.json();
+    })
     .then(function (releases) {
-      if (Array.isArray(releases)) {
+      if (Array.isArray(releases) && releases.length > 0) {
         let total = 0;
         releases.forEach(function (rel) {
           if (Array.isArray(rel.assets)) {
@@ -322,11 +383,33 @@ function loadGitHubStats() {
           }
         });
         if (downloadsEl && total > 0) {
-          downloadsEl.textContent = total.toLocaleString() + "+";
+          animateCount(downloadsEl, total, "+");
+          saveCache(null, null, total);
         }
       }
     })
     .catch(function (err) {
-      console.warn("Could not load release stats:", err);
+      console.warn("Could not load release downloads from GitHub API, checking check.json fallback:", err);
+      fetchFallbackStats();
     });
+
+  // Fallback: check.json is always hosted on the website domain without GitHub rate limits
+  function fetchFallbackStats() {
+    fetch("check.json?_t=" + Date.now())
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (checkData) {
+        if (checkData && checkData.stats) {
+          if (starsEl && typeof checkData.stats.stars === "number") {
+            animateCount(starsEl, checkData.stats.stars, "");
+          }
+          if (forksEl && typeof checkData.stats.forks === "number") {
+            animateCount(forksEl, checkData.stats.forks, "");
+          }
+          if (downloadsEl && typeof checkData.stats.downloads === "number") {
+            animateCount(downloadsEl, checkData.stats.downloads, "+");
+          }
+        }
+      })
+      .catch(function () {});
+  }
 }
