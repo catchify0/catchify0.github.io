@@ -1,8 +1,8 @@
 # =====================================================
 # Catchify - robots.txt
 # Author: Thamodharan G
-# Website: https://thamodharangm.github.io/catchify/
-# Last Updated: 2026-07-09
+# Website: https://catchify.textmateai.online/
+# Last Updated: 2026-09-14
 # =====================================================
 
 # Allow all search engines
