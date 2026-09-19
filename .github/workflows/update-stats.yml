@@ -166,15 +166,14 @@ jobs:
               target.write('\n')
           PY
 
-      - name: Create stats update pull request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: automation/update-project-stats
-          delete-branch: true
-          commit-message: "chore(stats): auto-update stats.json"
-          title: "chore(stats): update project statistics"
-          body: |
-            Automated update of `stats.json` and `check.json` from the latest public website releases.
-          add-paths: |
-            stats.json
-            check.json
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stats.json check.json
+          if git diff --staged --quiet; then
+            echo "No changes to stats.json"
+          else
+            git commit -m "chore(stats): auto-update stats.json [skip ci]"
+            git push origin HEAD:main
+          fi
