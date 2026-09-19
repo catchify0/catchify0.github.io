@@ -5,6 +5,8 @@
   "apk_downloads": 151,
   "ipa_downloads": 20,
   "version": "v2.4.2",
+  "android_version": "v2.4.2",
+  "ios_version": "v2.4.2",
   "apk_url": "https://github.com/thamodharangm/catchify/releases/download/2.4.2/catchify-v2.4.2.apk",
   "ipa_url": "https://github.com/thamodharangm/catchify/releases/download/v2.4.2/Catchify-v2.4.2.ipa",
   "changelog": ""

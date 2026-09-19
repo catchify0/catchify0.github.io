@@ -4,6 +4,8 @@ const REPO_API = "https://api.github.com/repos/thamodharangm/catchify";
 const ALL_RELEASES_API = "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100";
 const STATS_URL = "stats.json";
 const FEATURES_URL = "assets/features.txt";
+let androidVersionText = "v2.4.2";
+let iosVersionText = "v2.4.2";
 
 const changelogElement = document.getElementById("changelog_element");
 const featuresElement = document.getElementById("features_element");
@@ -74,16 +76,19 @@ function formatNumber(n) {
 function applyReleaseData(data) {
   if (!data) return;
 
-  // 1. Version Update
-  if (data.version) {
-    const versionStr = data.version.startsWith("v") ? data.version : "v" + data.version;
-    const versionEl = document.getElementById("download-version");
-    if (versionEl) versionEl.textContent = versionStr;
-    const versionAndroidEl = document.getElementById("download-version-android");
-    if (versionAndroidEl) versionAndroidEl.textContent = versionStr;
-    const versionIosEl = document.getElementById("download-version-ios");
-    if (versionIosEl) versionIosEl.textContent = versionStr;
-  }
+  // 1. Keep Android and iOS release versions independent.
+  const formatVersion = (version) => {
+    if (!version) return "";
+    return version.startsWith("v") ? version : "v" + version;
+  };
+  androidVersionText = formatVersion(data.android_version || data.version) || androidVersionText;
+  iosVersionText = formatVersion(data.ios_version || data.version) || iosVersionText;
+  const versionEl = document.getElementById("download-version");
+  if (versionEl) versionEl.textContent = androidVersionText;
+  const versionAndroidEl = document.getElementById("download-version-android");
+  if (versionAndroidEl) versionAndroidEl.textContent = androidVersionText;
+  const versionIosEl = document.getElementById("download-version-ios");
+  if (versionIosEl) versionIosEl.textContent = iosVersionText;
 
   // 2. Android APK Link
   if (data.apk_url) {
@@ -283,10 +288,10 @@ function parseChangelog(text) {
 
   const downloadLinkElement = document.querySelector("[data-download-link='android']");
   const iosDownloadLinkElement = document.querySelector("[data-download-link='ios']");
-  const versionElement = document.getElementById("download-version");
   const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
   const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/thamodharangm/catchify/releases/latest";
-  const verText = (versionElement && versionElement.textContent && versionElement.textContent.trim()) || "v2.4.1";
+  const androidVerText = androidVersionText || "v2.4.2";
+  const iosVerText = iosVersionText || "v2.4.2";
 
   if (androidItems.length > 0 || iosItems.length > 0) {
     changelogElement.innerHTML = `
@@ -299,7 +304,7 @@ function parseChangelog(text) {
               </svg>
               <span>Android Release</span>
             </div>
-            <span class="changelog-badge">${verText}</span>
+            <span class="changelog-badge">${androidVerText}</span>
           </div>
           <ul class="changelog-list">
             ${androidItems.map((item) => `
@@ -322,7 +327,7 @@ function parseChangelog(text) {
               </svg>
               <span>iOS Release</span>
             </div>
-            <span class="changelog-badge">${verText}</span>
+            <span class="changelog-badge">${iosVerText}</span>
           </div>
           <ul class="changelog-list">
             ${iosItems.map((item) => `

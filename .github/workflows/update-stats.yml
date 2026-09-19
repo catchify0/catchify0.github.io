@@ -86,17 +86,22 @@ jobs:
           # asset for each platform instead of looking only in the first release.
           apk_url = ''
           ipa_url = ''
+          android_version = ''
+          ios_version = ''
 
           if isinstance(releases, list):
               for release in releases:
+                  release_version = release.get('tag_name', '')
                   for asset in release.get('assets', []):
                       name = asset.get('name', '').lower()
                       url = asset.get('browser_download_url', '')
                       if name.endswith('.apk') and 'arm64' not in name and 'debug' not in name:
                           if not apk_url:
                               apk_url = url
+                              android_version = release_version
                       elif name.endswith('.ipa') and not ipa_url:
                           ipa_url = url
+                          ios_version = release_version
 
           if not apk_url:
               print('No APK asset found in the release list')
@@ -119,6 +124,8 @@ jobs:
               'apk_downloads': apk_downloads,
               'ipa_downloads': ipa_downloads,
               'version': version if str(version).startswith('v') else f'v{version}',
+              'android_version': android_version if str(android_version).startswith('v') else f'v{android_version}' if android_version else None,
+              'ios_version': ios_version if str(ios_version).startswith('v') else f'v{ios_version}' if ios_version else None,
               'apk_url': apk_url or None,
               'ipa_url': ipa_url or None,
               'changelog': body
