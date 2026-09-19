@@ -1,11 +1,11 @@
 {
   "stars": 1,
   "forks": 0,
-  "downloads": 167,
-  "apk_downloads": 148,
-  "ipa_downloads": 18,
-  "version": "v2.4.1",
+  "downloads": 173,
+  "apk_downloads": 151,
+  "ipa_downloads": 20,
+  "version": "v2.4.2",
   "apk_url": "https://github.com/thamodharangm/catchify/releases/download/2.4.1/catchify-v2.4.1.apk",
-  "ipa_url": "https://github.com/thamodharangm/catchify/releases/download/v2.4.1/Catchify-v2.4.1.ipa",
+  "ipa_url": "https://github.com/thamodharangm/catchify/releases/download/v2.4.2/Catchify-v2.4.2.ipa",
   "changelog": ""
 }
