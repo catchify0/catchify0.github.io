@@ -1,7 +1,7 @@
 # =====================================================
 # Catchify - robots.txt
 # Author: Thamodharan G
-# Website: https://thamodharangm.github.io/catchify/
+# Website: https://catchify0.github.io/
 # Last Updated: 2026-09-19
 # =====================================================
 
@@ -50,4 +50,4 @@ Allow: /*.woff2$
 Allow: /*.ttf$
 
 # Sitemap
-Sitemap: https://thamodharangm.github.io/catchify/sitemap.xml
+Sitemap: https://catchify0.github.io/sitemap.xml

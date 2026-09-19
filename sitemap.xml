@@ -4,28 +4,28 @@
 
   <!-- Home -->
   <url>
-    <loc>https://thamodharangm.github.io/catchify/</loc>
+    <loc>https://catchify0.github.io/</loc>
     <lastmod>2026-09-19</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://thamodharangm.github.io/catchify/assets/logo.png</image:loc>
+      <image:loc>https://catchify0.github.io/assets/logo.png</image:loc>
       <image:title>Catchify free music app</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://thamodharangm.github.io/catchify/assets/screenshot-1-home.jpg</image:loc>
+      <image:loc>https://catchify0.github.io/assets/screenshot-1-home.jpg</image:loc>
       <image:title>Catchify music app home screen</image:title>
     </image:image>
   </url>
 
   <!-- Spotify Alternative Guide -->
   <url>
-    <loc>https://thamodharangm.github.io/catchify/spotify-alternative.html</loc>
+    <loc>https://catchify0.github.io/spotify-alternative.html</loc>
     <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://thamodharangm.github.io/catchify/assets/screenshot-2-player.jpg</image:loc>
+      <image:loc>https://catchify0.github.io/assets/screenshot-2-player.jpg</image:loc>
       <image:title>Catchify music player</image:title>
     </image:image>
   </url>

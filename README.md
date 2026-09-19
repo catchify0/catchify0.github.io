@@ -75,8 +75,8 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
       </a>
     </td>
     <td align="center">
-      <a href="https://catchify.textmateai.online/">
-        <img src="https://img.shields.io/badge/Official_Website-catchify.online-A855F7?style=for-the-badge&logo=google-chrome&logoColor=white" height="60" alt="Official Website"><br/>
+      <a href="https://catchify0.github.io/">
+        <img src="https://img.shields.io/badge/Official_Website-GitHub_Pages-A855F7?style=for-the-badge&logo=google-chrome&logoColor=white" height="60" alt="Official Website"><br/>
         <b>Web & Guides</b>
       </a>
     </td>
@@ -85,7 +85,7 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
 
 - **Android Direct Download:** [Latest APK](https://github.com/thamodharangm/catchify/releases/latest)
 - **iOS Sideloading (Sideloadly / AltStore / TrollStore):** [Latest IPA](https://github.com/thamodharangm/catchify/releases/latest)
-- **Official Website:** [catchify.textmateai.online](https://catchify.textmateai.online/)
+- **Official Website:** [catchify0.github.io](https://catchify0.github.io/)
 
 
 ---
