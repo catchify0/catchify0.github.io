@@ -129,12 +129,8 @@ function fetchProjectStats() {
         if (forksEl && stats.forks !== undefined) forksEl.textContent = formatNumber(stats.forks);
         if (downloadsEl && stats.downloads !== undefined) downloadsEl.textContent = formatNumber(stats.downloads);
 
-        if (downloadsSubEl) {
-          if (stats.apk_downloads && stats.ipa_downloads) {
-            downloadsSubEl.textContent = `${stats.apk_downloads} APK · ${stats.ipa_downloads} IPA`;
-          } else {
-            downloadsSubEl.textContent = "Android APK & iOS IPA";
-          }
+        if (downloadsSubEl && Number.isFinite(Number(stats.apk_downloads)) && Number.isFinite(Number(stats.ipa_downloads))) {
+          downloadsSubEl.textContent = `${Number(stats.apk_downloads)} APK · ${Number(stats.ipa_downloads)} IPA`;
         }
 
         applyReleaseData(stats);
@@ -192,7 +188,7 @@ function fetchProjectStatsFromAPI() {
         if (downloadsEl) downloadsEl.textContent = formatNumber(total);
 
         const downloadsSubEl = document.getElementById("stat-downloads-sub");
-        if (downloadsSubEl && apkTotal && ipaTotal) {
+        if (downloadsSubEl) {
           downloadsSubEl.textContent = `${apkTotal} APK · ${ipaTotal} IPA`;
         }
       } catch (e) {

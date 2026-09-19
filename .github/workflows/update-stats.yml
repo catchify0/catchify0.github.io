@@ -23,7 +23,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Fetch repo info (public API)
-          REPO=$(curl -s \
+          REPO=$(curl --fail-with-body -sS \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/thamodharangm/catchify")
@@ -32,7 +32,7 @@ jobs:
           import json, sys
           try:
               d = json.load(sys.stdin)
-              print(d.get('stargazers_count') or d.get('watchers_count') or 0)
+              print(d.get('stargazers_count', 0))
           except:
               print(1)
           ")
@@ -40,15 +40,15 @@ jobs:
           import json, sys
           try:
               d = json.load(sys.stdin)
-              print(d.get('forks_count') or d.get('forks') or 0)
+              print(d.get('forks_count', 0))
           except:
               print(0)
           ")
           echo "Stars: $STARS | Forks: $FORKS"
 
           # Fetch all releases (authenticated with GH_TOKEN)
-          curl -s \
-            -H "Authorization: Bearer $GH_TOKEN" \
+          curl --fail-with-body -sS \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/thamodharangm/catchify/releases?per_page=100" > /tmp/releases.json
@@ -56,31 +56,28 @@ jobs:
           STARS=$STARS FORKS=$FORKS python3 -c "
           import json, sys, os
 
-          try:
-              with open('/tmp/releases.json', 'r', encoding='utf-8') as f:
-                  releases = json.load(f)
-          except Exception as e:
-              print('Failed to parse releases:', e)
-              releases = []
+          with open('/tmp/releases.json', 'r', encoding='utf-8') as f:
+              releases = json.load(f)
+          if not isinstance(releases, list):
+              raise ValueError('GitHub releases API returned a non-list response')
 
           total_downloads = 0
           apk_downloads = 0
           ipa_downloads = 0
 
-          if isinstance(releases, list):
-              for r in releases:
-                  for a in r.get('assets', []):
-                      name = a.get('name', '').lower()
-                      cnt = a.get('download_count', 0)
-                      total_downloads += cnt
-                      if name.endswith('.apk'):
-                          apk_downloads += cnt
-                      elif name.endswith('.ipa') or '.ipa' in name:
-                          ipa_downloads += cnt
+          for r in releases:
+              for a in r.get('assets', []):
+                  name = a.get('name', '').lower()
+                  cnt = int(a.get('download_count', 0) or 0)
+                  total_downloads += cnt
+                  if name.endswith('.apk'):
+                      apk_downloads += cnt
+                  elif name.endswith('.ipa'):
+                      ipa_downloads += cnt
 
-          latest = releases[0] if isinstance(releases, list) and len(releases) > 0 else {}
-          version = latest.get('tag_name', 'v2.4.1')
-          body = latest.get('body', '')
+          latest = releases[0] if releases else {}
+          version = latest.get('tag_name', 'v2.4.2')
+          body = next((r.get('body') for r in releases if r.get('body')), '')
 
           # Releases can be split by platform, so select the newest valid
           # asset for each platform instead of looking only in the first release.
@@ -89,24 +86,23 @@ jobs:
           android_version = ''
           ios_version = ''
 
-          if isinstance(releases, list):
-              for release in releases:
-                  release_version = release.get('tag_name', '')
-                  for asset in release.get('assets', []):
-                      name = asset.get('name', '').lower()
-                      url = asset.get('browser_download_url', '')
-                      if name.endswith('.apk') and 'arm64' not in name and 'debug' not in name:
-                          if not apk_url:
-                              apk_url = url
-                              android_version = release_version
-                      elif name.endswith('.ipa') and not ipa_url:
-                          ipa_url = url
-                          ios_version = release_version
+          for release in releases:
+              release_version = release.get('tag_name', '')
+              for asset in release.get('assets', []):
+                  name = asset.get('name', '').lower()
+                  url = asset.get('browser_download_url', '')
+                  if name.endswith('.apk') and 'arm64' not in name and 'debug' not in name:
+                      if not apk_url:
+                          apk_url = url
+                          android_version = release_version
+                  elif name.endswith('.ipa') and not ipa_url:
+                      ipa_url = url
+                      ios_version = release_version
 
           if not apk_url:
-              print('No APK asset found in the release list')
+              raise ValueError('No APK asset found in the release list')
           if not ipa_url:
-              print('No IPA asset found in the release list')
+              raise ValueError('No IPA asset found in the release list')
 
           try:
               stars = int(os.environ.get('STARS', '1'))
@@ -140,11 +136,40 @@ jobs:
           echo "Written stats.json:"
           cat stats.json
 
+          python3 - <<'PY'
+          import json
+
+          with open('stats.json', 'r', encoding='utf-8') as source:
+              stats = json.load(source)
+          with open('check.json', 'r', encoding='utf-8') as source:
+              check = json.load(source)
+
+          def without_v(value):
+              return value[1:] if isinstance(value, str) and value.startswith('v') else value
+
+          check['version'] = without_v(stats.get('android_version') or stats.get('version'))
+          check['androidVersion'] = without_v(stats.get('android_version'))
+          check['iosVersion'] = without_v(stats.get('ios_version'))
+          check['url'] = stats.get('apk_url')
+          check['iosurl'] = stats.get('ipa_url')
+          check['stats'] = {
+              'stars': stats.get('stars', 0),
+              'forks': stats.get('forks', 0),
+              'downloads': stats.get('downloads', 0),
+              'apk_downloads': stats.get('apk_downloads', 0),
+              'ipa_downloads': stats.get('ipa_downloads', 0),
+          }
+
+          with open('check.json', 'w', encoding='utf-8') as target:
+              json.dump(check, target, indent=2, ensure_ascii=False)
+              target.write('\n')
+          PY
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stats.json
+          git add stats.json check.json
           if git diff --staged --quiet; then
             echo "No changes to stats.json"
           else
