@@ -79,7 +79,7 @@ jobs:
                           ipa_downloads += cnt
 
           latest = releases[0] if isinstance(releases, list) and len(releases) > 0 else {}
-          version = latest.get('tag_name', 'v2.4.0')
+          version = latest.get('tag_name', 'v2.4.1')
           body = latest.get('body', '')
 
           # Releases can be split by platform, so select the newest valid
