@@ -3,15 +3,15 @@
   "androidVersion": "2.4.2",
   "iosVersion": "2.4.2",
   "announcementurl": null,
-  "url": "https://github.com/catchify0/catchify0.github.io/releases/download/2.4.2/catchify-v2.4.2.apk",
+  "url": "https://github.com/thamodharangm/catchify/releases/download/2.4.2/catchify-v2.4.2.apk",
   "arm64url": "https://github.com/catchify0/catchify0.github.io/releases/download/2.4.2/catchify-v2.4.2-arm64-v8a.apk",
   "iosurl": "https://github.com/thamodharangm/catchify/releases/download/v2.4.2/Catchify-v2.4.2.ipa",
   "ioszipurl": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.2/Catchify-v2.4.2-iOS.zip",
   "stats": {
     "stars": 1,
     "forks": 0,
-    "downloads": 175,
+    "downloads": 174,
     "apk_downloads": 152,
-    "ipa_downloads": 21
+    "ipa_downloads": 20
   }
 }
