@@ -5,9 +5,9 @@
   "apk_downloads": 1,
   "ipa_downloads": 0,
   "version": "v2.4.3",
-  "android_version": "v2.4.2",
+  "android_version": "v2.4.3",
   "ios_version": "v2.4.3",
-  "apk_url": "https://github.com/catchify0/catchify0.github.io/releases/download/2.4.2/catchify-v2.4.2.apk",
+  "apk_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3.apk",
   "ipa_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3.ipa",
   "changelog": ""
 }
