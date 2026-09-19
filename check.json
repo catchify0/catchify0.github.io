@@ -1,17 +1,17 @@
 {
-    "version":  "2.4.3",
-    "androidVersion":  "2.4.3",
-    "iosVersion":  "2.4.3",
-    "announcementurl":  null,
-    "url":  "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3.apk",
-    "arm64url":  "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3-arm64-v8a.apk",
-    "iosurl":  "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3.ipa",
-    "ioszipurl":  "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3-iOS.zip",
-    "stats":  {
-                  "stars":  0,
-                  "forks":  0,
-                  "downloads":  1,
-                  "apk_downloads":  1,
-                  "ipa_downloads":  0
-              }
+  "version": "2.4.3",
+  "androidVersion": "2.4.3",
+  "iosVersion": "2.4.3",
+  "announcementurl": null,
+  "url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3.apk",
+  "arm64url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3-arm64-v8a.apk",
+  "iosurl": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3.ipa",
+  "ioszipurl": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3-iOS.zip",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "downloads": 1,
+    "apk_downloads": 1,
+    "ipa_downloads": 0
+  }
 }
