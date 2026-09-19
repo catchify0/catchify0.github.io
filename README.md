@@ -113,11 +113,6 @@ You can see frequently asked questions and their answers [here](https://github.c
 
 ---
 
-## Credits
-
-[Catchify](https://github.com/gokadzev/Catchify) - Original inspiration for the concept and name. It is now completely reimplemented with new design and branding.
-
-
 ---
 
 ## License
