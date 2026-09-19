@@ -553,6 +553,14 @@ main {
   background: rgba(255, 255, 255, 0.22);
 }
 
+.platform-btn .btn-version {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding-left: 0.15rem;
+  opacity: 0.9;
+}
+
 /* Android Button */
 .platform-btn.btn-android {
   background: #a855f7;

@@ -87,8 +87,12 @@ function applyReleaseData(data) {
   if (versionEl) versionEl.textContent = androidVersionText;
   const versionAndroidEl = document.getElementById("download-version-android");
   if (versionAndroidEl) versionAndroidEl.textContent = androidVersionText;
+  const versionAndroidButtonEl = document.getElementById("download-version-android-button");
+  if (versionAndroidButtonEl) versionAndroidButtonEl.textContent = androidVersionText;
   const versionIosEl = document.getElementById("download-version-ios");
   if (versionIosEl) versionIosEl.textContent = iosVersionText;
+  const versionIosButtonEl = document.getElementById("download-version-ios-button");
+  if (versionIosButtonEl) versionIosButtonEl.textContent = iosVersionText;
 
   // 2. Android APK Link
   if (data.apk_url) {
