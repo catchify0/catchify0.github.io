@@ -82,16 +82,26 @@ jobs:
           version = latest.get('tag_name', 'v2.4.0')
           body = latest.get('body', '')
 
-          apk_url = 'https://github.com/thamodharangm/catchify/releases/download/2.4.0/catchify-v2.4.0.apk'
-          ipa_url = 'https://github.com/thamodharangm/catchify/releases/download/2.4.0/Catchify-v2.4.0.ipa'
+          # Releases can be split by platform, so select the newest valid
+          # asset for each platform instead of looking only in the first release.
+          apk_url = ''
+          ipa_url = ''
 
-          for a in latest.get('assets', []):
-              name = a.get('name', '').lower()
-              url = a.get('browser_download_url', '')
-              if name.endswith('.apk') and 'arm64' not in name:
-                  apk_url = url
-              elif name.endswith('.ipa'):
-                  ipa_url = url
+          if isinstance(releases, list):
+              for release in releases:
+                  for asset in release.get('assets', []):
+                      name = asset.get('name', '').lower()
+                      url = asset.get('browser_download_url', '')
+                      if name.endswith('.apk') and 'arm64' not in name and 'debug' not in name:
+                          if not apk_url:
+                              apk_url = url
+                      elif name.endswith('.ipa') and not ipa_url:
+                          ipa_url = url
+
+          if not apk_url:
+              print('No APK asset found in the release list')
+          if not ipa_url:
+              print('No IPA asset found in the release list')
 
           try:
               stars = int(os.environ.get('STARS', '1'))
@@ -109,8 +119,8 @@ jobs:
               'apk_downloads': apk_downloads,
               'ipa_downloads': ipa_downloads,
               'version': version if str(version).startswith('v') else f'v{version}',
-              'apk_url': apk_url,
-              'ipa_url': ipa_url,
+              'apk_url': apk_url or None,
+              'ipa_url': ipa_url or None,
               'changelog': body
           }
 
