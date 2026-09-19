@@ -2,7 +2,7 @@
 # Catchify - robots.txt
 # Author: Thamodharan G
 # Website: https://thamodharangm.github.io/catchify/
-# Last Updated: 2026-09-14
+# Last Updated: 2026-09-19
 # =====================================================
 
 # Allow all search engines
@@ -49,11 +49,5 @@ Allow: /*.woff$
 Allow: /*.woff2$
 Allow: /*.ttf$
 
-# Crawl delay (ignored by Google, respected by some crawlers)
-Crawl-delay: 5
-
 # Sitemap
 Sitemap: https://thamodharangm.github.io/catchify/sitemap.xml
-
-# Preferred Host
-Host: thamodharangm.github.io

@@ -2,7 +2,7 @@
   "id": "/catchify/",
   "name": "Catchify - Free Music Streaming & Offline Player",
   "short_name": "Catchify",
-  "description": "Catchify is a free, ad-free music streaming app for Android with offline downloads, custom playlists, a built-in equalizer, lyrics, and support for 21+ languages.",
+  "description": "Catchify is a free, ad-free music streaming app for Android and iOS with offline downloads, custom playlists, equalizer, lyrics, and support for 21+ languages.",
 
   "start_url": "/catchify/",
   "scope": "/catchify/",

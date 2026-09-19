@@ -8,10 +8,10 @@ Country              : India
 /* PRODUCT */
 
 Product Name         : Catchify
-Tagline              : Free, ad-free music streaming for Android
+Tagline              : Free, ad-free music streaming for Android and iOS
 Category             : Music & Audio
 Type                 : Music Streaming & Offline Player
-Platform             : Android
+Platform             : Android and iOS
 Current Status       : Active Development
 
 /* DESCRIPTION */
