@@ -7,7 +7,7 @@
   "version": "v2.4.2",
   "android_version": "v2.4.2",
   "ios_version": "v2.4.2",
-  "apk_url": "https://github.com/thamodharangm/catchify/releases/download/2.4.2/catchify-v2.4.2.apk",
-  "ipa_url": "https://github.com/thamodharangm/catchify/releases/download/v2.4.2/Catchify-v2.4.2.ipa",
+  "apk_url": "https://github.com/catchify0/catchify0.github.io/releases/download/2.4.2/catchify-v2.4.2.apk",
+  "ipa_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.2/Catchify-v2.4.2.ipa",
   "changelog": "### 🤖 Android Release (v2.4.1)\n• **Synced Live Lyrics:** Real-time streaming synchronized lyrics alongside playback\n• **Spotify Playlist Import:** Import any public Spotify playlist directly via share link\n• **Offline Audio:** High-quality offline song and playlist downloads with zero ads\n• **Equalizer & Audio FX:** Customizable equalizer with bass boost presets\n• **21+ Languages:** Localized interface and curated music in Tamil, Hindi, Telugu, and more\n\n### 🍎 iOS Release (v2.4.1)\n• **Cross-Platform Debut:** Full iOS package for iPhone and iPad via Sideloadly, AltStore, & TrollStore\n• **Lock Screen & Background Audio:** Native lock-screen controls and continuous playback\n• **Synced Live Lyrics:** Real-time synchronized lyrics on iPhone and iPad\n• **Spotify Playlist Import:** Convert and stream any public Spotify playlist directly\n• **Zero Ads & Unlimited Skips:** Full premium music experience without subscriptions"
 }
