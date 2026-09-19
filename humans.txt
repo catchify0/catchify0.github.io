@@ -16,9 +16,9 @@ Current Status       : Active Development
 
 /* DESCRIPTION */
 
-Catchify is a free Android app for streaming and downloading music. It has
-no ads, no subscriptions, and includes offline playback, custom playlists,
-an equalizer, lyrics, and support for 21+ languages.
+Catchify is a free music app for Android and iOS. It has no ads or
+subscription, and includes offline playback, custom playlists, an equalizer,
+synced lyrics, and support for 21+ languages.
 
 /* FEATURES */
 
