@@ -687,6 +687,23 @@ main {
 .hero-meta-bar .version-badge {
   font-weight: 600;
   color: var(--primary, #a855f7);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hero-meta-bar .version-badge-android::before,
+.hero-meta-bar .version-badge-ios::before {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.hero-meta-bar .version-badge-ios {
+  color: #4b5563;
 }
 
 .hero-meta-bar .meta-separator {

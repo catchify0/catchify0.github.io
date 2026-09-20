@@ -109,6 +109,8 @@ jobs:
               'apk_downloads': apk_downloads,
               'ipa_downloads': ipa_downloads,
               'version': version if str(version).startswith('v') else f'v{version}',
+              'android_version': version if str(version).startswith('v') else f'v{version}',
+              'ios_version': version if str(version).startswith('v') else f'v{version}',
               'apk_url': apk_url,
               'ipa_url': ipa_url,
               'changelog': body

@@ -77,12 +77,16 @@ function applyReleaseData(data) {
   // 1. Version Update
   if (data.version) {
     const versionStr = data.version.startsWith("v") ? data.version : "v" + data.version;
-    const versionEl = document.getElementById("download-version");
-    if (versionEl) versionEl.textContent = versionStr;
     const versionAndroidEl = document.getElementById("download-version-android");
-    if (versionAndroidEl) versionAndroidEl.textContent = versionStr;
+    if (versionAndroidEl) {
+      const androidVersion = data.android_version || data.version;
+      versionAndroidEl.textContent = androidVersion.startsWith("v") ? androidVersion : "v" + androidVersion;
+    }
     const versionIosEl = document.getElementById("download-version-ios");
-    if (versionIosEl) versionIosEl.textContent = versionStr;
+    if (versionIosEl) {
+      const iosVersion = data.ios_version || data.version;
+      versionIosEl.textContent = iosVersion.startsWith("v") ? iosVersion : "v" + iosVersion;
+    }
   }
 
   // 2. Android APK Link
@@ -283,10 +287,12 @@ function parseChangelog(text) {
 
   const downloadLinkElement = document.querySelector("[data-download-link='android']");
   const iosDownloadLinkElement = document.querySelector("[data-download-link='ios']");
-  const versionElement = document.getElementById("download-version");
+  const versionElement = document.getElementById("download-version-android");
+  const iosVersionElement = document.getElementById("download-version-ios");
   const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/catchify0/catchify0.github.io/releases/latest";
   const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/catchify0/catchify0.github.io/releases/latest";
   const verText = (versionElement && versionElement.textContent && versionElement.textContent.trim()) || "v2.4.1";
+  const iosVerText = (iosVersionElement && iosVersionElement.textContent && iosVersionElement.textContent.trim()) || verText;
 
   if (androidItems.length > 0 || iosItems.length > 0) {
     changelogElement.innerHTML = `
@@ -322,7 +328,7 @@ function parseChangelog(text) {
               </svg>
               <span>iOS Release</span>
             </div>
-            <span class="changelog-badge">${verText}</span>
+            <span class="changelog-badge">${iosVerText}</span>
           </div>
           <ul class="changelog-list">
             ${iosItems.map((item) => `
