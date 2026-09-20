@@ -45,8 +45,8 @@ UI Design            : Thamodharan Ganesan
 
 /* CONTACT */
 
-Website              : https://catchify0.github.io/
-GitHub               : https://github.com/catchify0/catchify0.github.io
+Website              : https://catchify.io/
+GitHub               : https://github.com/catchify0/catchify.io
 Email                : thamodharangp@gmail.com
 LinkedIn             : https://www.linkedin.com/in/thamodharangp
 

@@ -1,7 +1,7 @@
 const RELEASES_API =
-  "https://api.github.com/repos/catchify0/catchify0.github.io/releases/latest";
-const REPO_API = "https://api.github.com/repos/catchify0/catchify0.github.io";
-const ALL_RELEASES_API = "https://api.github.com/repos/catchify0/catchify0.github.io/releases?per_page=100";
+  "https://api.github.com/repos/catchify0/catchify.io/releases/latest";
+const REPO_API = "https://api.github.com/repos/catchify0/catchify.io";
+const ALL_RELEASES_API = "https://api.github.com/repos/catchify0/catchify.io/releases?per_page=100";
 const STATS_URL = "stats.json";
 const FEATURES_URL = "assets/features.txt";
 
@@ -284,8 +284,8 @@ function parseChangelog(text) {
   const downloadLinkElement = document.querySelector("[data-download-link='android']");
   const iosDownloadLinkElement = document.querySelector("[data-download-link='ios']");
   const versionElement = document.getElementById("download-version");
-  const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/catchify0/catchify0.github.io/releases/latest";
-  const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/catchify0/catchify0.github.io/releases/latest";
+  const apkUrl = (downloadLinkElement && downloadLinkElement.href) || "https://github.com/catchify0/catchify.io/releases/latest";
+  const ipaUrl = (iosDownloadLinkElement && iosDownloadLinkElement.href) || "https://github.com/catchify0/catchify.io/releases/latest";
   const verText = (versionElement && versionElement.textContent && versionElement.textContent.trim()) || "v2.4.1";
 
   if (androidItems.length > 0 || iosItems.length > 0) {

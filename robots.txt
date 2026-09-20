@@ -1,7 +1,7 @@
 # =====================================================
 # Catchify - robots.txt
 # Author: Thamodharan G
-# Website: https://catchify0.github.io/
+# Website: https://catchify.io/
 # Last Updated: 2026-09-14
 # =====================================================
 
@@ -53,7 +53,7 @@ Allow: /*.ttf$
 Crawl-delay: 5
 
 # Sitemap
-Sitemap: https://catchify0.github.io/sitemap.xml
+Sitemap: https://catchify.io/sitemap.xml
 
 # Preferred Host
-Host: catchify0.github.io
+Host: catchify.io
