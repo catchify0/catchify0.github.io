@@ -1,13 +1,13 @@
 {
   "stars": 0,
   "forks": 0,
-  "downloads": 7,
+  "downloads": 9,
   "apk_downloads": 4,
-  "ipa_downloads": 2,
-  "version": "v2.4.3",
-  "android_version": "v2.4.3",
-  "ios_version": "v2.4.3",
-  "apk_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/catchify-v2.4.3.apk",
-  "ipa_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.3/Catchify-v2.4.3.ipa",
+  "ipa_downloads": 4,
+  "version": "v2.4.4",
+  "android_version": "v2.4.4",
+  "ios_version": "v2.4.4",
+  "apk_url": "https://github.com/catchify0/catchify0.github.io/releases/download/2.4.0/catchify-v2.4.0.apk",
+  "ipa_url": "https://github.com/catchify0/catchify0.github.io/releases/download/v2.4.4/Catchify-v2.4.4.ipa",
   "changelog": ""
 }
