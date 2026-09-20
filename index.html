@@ -19,10 +19,10 @@
     <meta name="googlebot" content="index, follow" />
     <meta name="author" content="Thamodharan Ganesan" />
     <meta name="theme-color" content="#fffbea" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111827" />
     <meta name="application-name" content="Catchify" />
     <meta name="google-site-verification" content="9zC34fSpgyMnwF8GUffEfNrquEFpQy9s4Bbg8fO726U" />
     <meta name="google-site-verification" content="Ao05b9GYE1DpdheLQb3PSyl-9SZUAfSguNKBjlmWiD4" />
+    <script src="assets/js/theme.js?v=20260920b"></script>
     <link rel="canonical" href="https://catchify0.github.io/" />
     <link rel="alternate" hreflang="en" href="https://catchify0.github.io/" />
     <link rel="alternate" hreflang="x-default" href="https://catchify0.github.io/" />
@@ -32,19 +32,6 @@
     <link rel="manifest" href="manifest.json" />
     <meta name="msapplication-config" content="browserconfig.xml" />
     <meta name="msapplication-TileColor" content="#a855f7" />
-    <script>
-      (function () {
-        try {
-          var mode = localStorage.getItem("catchify-theme") || "system";
-          var dark = mode === "dark" || (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-          document.documentElement.dataset.themeMode = mode;
-          document.documentElement.dataset.theme = dark ? "dark" : "light";
-          document.documentElement.style.colorScheme = dark ? "dark" : "light";
-          document.documentElement.classList.add(dark ? "theme-dark" : "theme-light");
-        } catch (e) {}
-      }());
-    </script>
-
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
@@ -428,7 +415,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="style.css?v=20260920a" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=20260920b" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -437,32 +424,12 @@
     />
   </head>
   <body>
-    <script>
-      if (document.documentElement.classList.contains("theme-dark")) {
-        document.body.classList.replace("light", "dark");
-      }
-    </script>
     <nav id="navigation-bar">
       <div class="catchify-nav-logo">
         <a href="index.html" class="nav-brand-link">
           <img class="catchify-logo" src="assets/logo.png" alt="Catchify logo" width="44" height="44" />
           <span class="nav-brand-name">Catchify</span>
         </a>
-        <button
-          id="theme-toggle"
-          class="theme-toggle"
-          type="button"
-          aria-label="Switch to dark mode"
-          aria-pressed="false"
-          title="Switch color theme"
-        >
-          <span class="theme-toggle-track" aria-hidden="true">
-            <span class="theme-toggle-thumb">
-              <span class="theme-toggle-icon">☀</span>
-            </span>
-          </span>
-          <span class="theme-toggle-label">Light</span>
-        </button>
         <button
           id="nav-toggle"
           class="nav-toggle-btn"
@@ -499,14 +466,20 @@
         <i>chat_bubble</i>
         <span>F.A.Q</span>
       </a>
-      <label class="theme-control" for="theme-select">
-        <span>Theme</span>
-        <select id="theme-select" aria-label="Color theme">
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
+      <div class="theme-toggle">
+        <input
+          class="theme-toggle__input"
+          id="theme-toggle"
+          type="checkbox"
+          role="switch"
+          aria-label="Use Theme mode"
+        />
+        <span class="theme-toggle__icon" aria-hidden="true">
+          <span class="theme-toggle__icon-part theme-toggle__icon-part--sun"></span>
+          <span class="theme-toggle__icon-part theme-toggle__icon-part--moon"></span>
+        </span>
+        <span class="theme-toggle__label">Theme mode</span>
+      </div>
     </nav>
     <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
@@ -1142,5 +1115,5 @@
     type="module"
     src="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.js"
   ></script>
-  <script type="text/javascript" src="assets/js/script.js?v=20260914g" defer></script>
+  <script type="text/javascript" src="assets/js/script.js?v=20260920b" defer></script>
 </html>

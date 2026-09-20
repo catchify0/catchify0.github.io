@@ -7,62 +7,6 @@ const FEATURES_URL = "assets/features.txt";
 const changelogElement = document.getElementById("changelog_element");
 const featuresElement = document.getElementById("features_element");
 
-function getThemeMode() {
-  try {
-    return localStorage.getItem("catchify-theme") || "system";
-  } catch (e) {
-    return "system";
-  }
-}
-
-function applyTheme(mode) {
-  const selectedMode = ["light", "dark", "system"].includes(mode) ? mode : "system";
-  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const resolvedTheme = selectedMode === "system" ? (prefersDark ? "dark" : "light") : selectedMode;
-  document.documentElement.dataset.theme = resolvedTheme;
-  document.documentElement.dataset.themeMode = selectedMode;
-  document.documentElement.style.colorScheme = resolvedTheme;
-  document.body.classList.toggle("dark", resolvedTheme === "dark");
-  document.body.classList.toggle("light", resolvedTheme !== "dark");
-  const selector = document.getElementById("theme-select");
-  if (selector) selector.value = selectedMode;
-  const meta = document.querySelector("meta[name='theme-color']");
-  if (meta) meta.setAttribute("content", resolvedTheme === "dark" ? "#111827" : "#fffbea");
-  const toggle = document.getElementById("theme-toggle");
-  if (toggle) {
-    const isDark = resolvedTheme === "dark";
-    toggle.setAttribute("aria-pressed", isDark ? "true" : "false");
-    toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-    const label = toggle.querySelector(".theme-toggle-label");
-    if (label) label.textContent = isDark ? "Dark" : "Light";
-    const icon = toggle.querySelector(".theme-toggle-icon");
-    if (icon) icon.textContent = isDark ? "☾" : "☀";
-  }
-  try {
-    localStorage.setItem("catchify-theme", selectedMode);
-  } catch (e) {}
-}
-
-function setupTheme() {
-  applyTheme(getThemeMode());
-  const selector = document.getElementById("theme-select");
-  if (selector) {
-    selector.addEventListener("change", () => applyTheme(selector.value));
-  }
-  if (window.matchMedia) {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener("change", () => {
-        if (getThemeMode() === "system") applyTheme("system");
-      });
-    } else if (mediaQuery.addListener) {
-      mediaQuery.addListener(() => {
-        if (getThemeMode() === "system") applyTheme("system");
-      });
-    }
-  }
-}
-
 function makeHttpRequest(url, callback, onError) {
   const xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function () {
@@ -82,14 +26,6 @@ function makeHttpRequest(url, callback, onError) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  setupTheme();
-  var themeToggle = document.getElementById("theme-toggle");
-  if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-      var nextTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      applyTheme(nextTheme);
-    });
-  }
   const carouselEl = document.getElementById("screenshot-carousel");
   if (carouselEl && typeof Splide !== "undefined") {
     new Splide("#screenshot-carousel", {

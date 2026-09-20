@@ -15,8 +15,7 @@
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
     <meta name="author" content="Thamodharan Ganesan" />
-    <meta name="theme-color" content="#fffbea" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111827" />
+    <script src="assets/js/theme.js?v=20260920b"></script>
     <link rel="canonical" href="https://catchify0.github.io/spotify-alternative.html" />
     <link rel="icon" type="image/png" href="assets/logo.png" />
     <link rel="apple-touch-icon" href="assets/logo.png" />
@@ -29,19 +28,6 @@
     <meta property="og:image" content="https://catchify0.github.io/assets/logo.png" />
     <meta property="og:url" content="https://catchify0.github.io/spotify-alternative.html" />
     <meta property="og:site_name" content="Catchify" />
-    <script>
-      (function () {
-        try {
-          var mode = localStorage.getItem("catchify-theme") || "system";
-          var dark = mode === "dark" || (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-          document.documentElement.dataset.themeMode = mode;
-          document.documentElement.dataset.theme = dark ? "dark" : "light";
-          document.documentElement.style.colorScheme = dark ? "dark" : "light";
-          document.documentElement.classList.add(dark ? "theme-dark" : "theme-light");
-        } catch (e) {}
-      }());
-    </script>
-
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="5 Reasons Catchify is the Best Free Spotify Alternative for Android &amp; iOS" />
@@ -145,18 +131,13 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" as="style" />
     <link href="https://cdn.jsdelivr.net/npm/beercss@4.0.20/dist/cdn/beer.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="style.css?v=20260914g" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=20260920b" />
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;800;900&display=swap" rel="stylesheet" />
   </head>
 
-  <body class="light article-page">
-    <script>
-      if (document.documentElement.classList.contains("theme-dark")) {
-        document.body.classList.replace("light", "dark");
-      }
-    </script>
+  <body class="article-page">
     <nav id="navigation-bar">
       <div class="catchify-nav-logo">
         <a href="index.html" class="nav-brand-link">
@@ -199,14 +180,20 @@
         <i>chat_bubble</i>
         <span>F.A.Q</span>
       </a>
-      <label class="theme-control" for="theme-select">
-        <span>Theme</span>
-        <select id="theme-select" aria-label="Color theme">
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
+      <div class="theme-toggle">
+        <input
+          class="theme-toggle__input"
+          id="theme-toggle"
+          type="checkbox"
+          role="switch"
+          aria-label="Use Theme mode"
+        />
+        <span class="theme-toggle__icon" aria-hidden="true">
+          <span class="theme-toggle__icon-part theme-toggle__icon-part--sun"></span>
+          <span class="theme-toggle__icon-part theme-toggle__icon-part--moon"></span>
+        </span>
+        <span class="theme-toggle__label">Theme mode</span>
+      </div>
     </nav>
     <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
@@ -406,5 +393,5 @@
       </footer>
     </main>
   </body>
-  <script type="text/javascript" src="assets/js/script.js?v=20260914g" defer></script>
+  <script type="text/javascript" src="assets/js/script.js?v=20260920b" defer></script>
 </html>
