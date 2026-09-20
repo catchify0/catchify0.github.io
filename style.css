@@ -1,5 +1,50 @@
 
 
+html[data-theme="dark"] {
+  --primary: #a78bfa;
+  --on-primary: #1f1636;
+  --primary-container: #312e81;
+  --on-primary-container: #e9d5ff;
+  --secondary: #c4b5fd;
+  --on-secondary: #1f1636;
+  --secondary-container: #3b2d6d;
+  --on-secondary-container: #e9d5ff;
+  --tertiary: #f9a8d4;
+  --on-tertiary: #4c0519;
+  --tertiary-container: #831843;
+  --on-tertiary-container: #fce7f3;
+  --error: #f87171;
+  --on-error: #1f2937;
+  --error-container: #7f1d1d;
+  --on-error-container: #fee2e2;
+  --background: #0f172a;
+  --on-background: #e2e8f0;
+  --surface: #111827;
+  --on-surface: #e5e7eb;
+  --surface-variant: #1f2937;
+  --on-surface-variant: #cbd5e1;
+  --outline: #475569;
+  --outline-variant: #312e81;
+  --shadow: #020617;
+  --scrim: #020617;
+  --inverse-surface: #f8fafc;
+  --inverse-on-surface: #0f172a;
+  --inverse-primary: #7c3aed;
+  --surface-dim: #0f172a;
+  --surface-bright: #1e293b;
+  --surface-container-lowest: #0b1120;
+  --surface-container-low: #111827;
+  --surface-container: #1f2937;
+  --surface-container-high: #243244;
+  --surface-container-highest: #2b3a4f;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    color-scheme: dark;
+  }
+}
+
 body.light {
   --primary: #a855f7;
   --on-primary: #ffffff;
@@ -39,6 +84,45 @@ body.light {
   --surface-container-highest: #fbecc4;
 }
 
+body.dark {
+  --primary: #d8b4fe;
+  --on-primary: #3b0764;
+  --primary-container: #581c87;
+  --on-primary-container: #f3e8ff;
+  --secondary: #d8b4fe;
+  --on-secondary: #3b0764;
+  --secondary-container: #4c1d95;
+  --on-secondary-container: #ede9fe;
+  --tertiary: #f9a8d4;
+  --on-tertiary: #500724;
+  --tertiary-container: #831843;
+  --on-tertiary-container: #fce7f3;
+  --error: #fca5a5;
+  --on-error: #450a0a;
+  --error-container: #7f1d1d;
+  --on-error-container: #fee2e2;
+  --background: #111827;
+  --on-background: #f9fafb;
+  --surface: #1f2937;
+  --on-surface: #f9fafb;
+  --surface-variant: #374151;
+  --on-surface-variant: #d1d5db;
+  --outline: #9ca3af;
+  --outline-variant: #4b5563;
+  --shadow: #000000;
+  --scrim: #000000;
+  --inverse-surface: #f9fafb;
+  --inverse-on-surface: #1f2937;
+  --inverse-primary: #7e22ce;
+  --surface-dim: #111827;
+  --surface-bright: #374151;
+  --surface-container-lowest: #111827;
+  --surface-container-low: #1f2937;
+  --surface-container: #273449;
+  --surface-container-high: #374151;
+  --surface-container-highest: #4b5563;
+}
+
 /* ==========================================================================
    Base & Root Resets (Responsive Safety)
    ========================================================================== */
@@ -67,6 +151,7 @@ body {
   line-height: 1.5;
   padding-left: max(0px, env(safe-area-inset-left));
   padding-right: max(0px, env(safe-area-inset-right));
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 main {
@@ -106,6 +191,67 @@ main {
   letter-spacing: -0.01em;
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.65rem 0.35rem 0.45rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 999px;
+  background: var(--surface-container);
+  color: var(--on-surface);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover, .theme-toggle:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--outline);
+}
+
+.theme-toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 2.5rem;
+  height: 1.4rem;
+  padding: 0.15rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container-highest) 100%);
+  border: 1px solid var(--outline-variant);
+}
+
+.theme-toggle-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transform: translateX(0);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+html[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(1.06rem);
+}
+
+.theme-toggle-icon {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.theme-toggle-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .nav-toggle-btn {
   display: none;
   flex-direction: column;
@@ -121,6 +267,70 @@ main {
   background: transparent;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+}
+
+.theme-control {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--on-surface-variant);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.theme-control select {
+  min-height: 2.25rem;
+  max-width: 9rem;
+  padding: 0.25rem 1.8rem 0.25rem 0.55rem;
+  border: 1px solid var(--outline-variant);
+  border-radius: 0.6rem;
+  color: var(--on-surface);
+  background: var(--surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-control select:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media only screen and (min-width: 993px) {
+  .theme-control {
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+    margin-top: auto;
+    padding: 0.5rem 0.1rem 0;
+    text-align: center;
+  }
+
+  .theme-control select {
+    width: 100%;
+    padding: 0.25rem;
+    font-size: 0.68rem;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .theme-control {
+    justify-content: space-between;
+    padding: 0.85rem 1.5rem;
+    border-top: 1px solid var(--outline-variant);
+    background: var(--surface);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .hamburger-bar {
@@ -337,6 +547,10 @@ main {
     padding: 0;
     padding-top: env(safe-area-inset-top, 0px);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  body.dark #navigation-bar {
+    background: rgba(31, 41, 55, 0.96);
   }
 
   #navigation-bar.nav-open {

@@ -2,11 +2,66 @@ const RELEASES_API =
   "https://api.github.com/repos/catchify0/catchify0.github.io/releases/latest";
 const REPO_API = "https://api.github.com/repos/catchify0/catchify0.github.io";
 const ALL_RELEASES_API = "https://api.github.com/repos/catchify0/catchify0.github.io/releases?per_page=100";
-const STATS_URL = "stats.json";
 const FEATURES_URL = "assets/features.txt";
 
 const changelogElement = document.getElementById("changelog_element");
 const featuresElement = document.getElementById("features_element");
+
+function getThemeMode() {
+  try {
+    return localStorage.getItem("catchify-theme") || "system";
+  } catch (e) {
+    return "system";
+  }
+}
+
+function applyTheme(mode) {
+  const selectedMode = ["light", "dark", "system"].includes(mode) ? mode : "system";
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const resolvedTheme = selectedMode === "system" ? (prefersDark ? "dark" : "light") : selectedMode;
+  document.documentElement.dataset.theme = resolvedTheme;
+  document.documentElement.dataset.themeMode = selectedMode;
+  document.documentElement.style.colorScheme = resolvedTheme;
+  document.body.classList.toggle("dark", resolvedTheme === "dark");
+  document.body.classList.toggle("light", resolvedTheme !== "dark");
+  const selector = document.getElementById("theme-select");
+  if (selector) selector.value = selectedMode;
+  const meta = document.querySelector("meta[name='theme-color']");
+  if (meta) meta.setAttribute("content", resolvedTheme === "dark" ? "#111827" : "#fffbea");
+  const toggle = document.getElementById("theme-toggle");
+  if (toggle) {
+    const isDark = resolvedTheme === "dark";
+    toggle.setAttribute("aria-pressed", isDark ? "true" : "false");
+    toggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    const label = toggle.querySelector(".theme-toggle-label");
+    if (label) label.textContent = isDark ? "Dark" : "Light";
+    const icon = toggle.querySelector(".theme-toggle-icon");
+    if (icon) icon.textContent = isDark ? "☾" : "☀";
+  }
+  try {
+    localStorage.setItem("catchify-theme", selectedMode);
+  } catch (e) {}
+}
+
+function setupTheme() {
+  applyTheme(getThemeMode());
+  const selector = document.getElementById("theme-select");
+  if (selector) {
+    selector.addEventListener("change", () => applyTheme(selector.value));
+  }
+  if (window.matchMedia) {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", () => {
+        if (getThemeMode() === "system") applyTheme("system");
+      });
+    } else if (mediaQuery.addListener) {
+      mediaQuery.addListener(() => {
+        if (getThemeMode() === "system") applyTheme("system");
+      });
+    }
+  }
+}
 
 function makeHttpRequest(url, callback, onError) {
   const xmlHttp = new XMLHttpRequest();
@@ -27,6 +82,14 @@ function makeHttpRequest(url, callback, onError) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  setupTheme();
+  var themeToggle = document.getElementById("theme-toggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      var nextTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(nextTheme);
+    });
+  }
   const carouselEl = document.getElementById("screenshot-carousel");
   if (carouselEl && typeof Splide !== "undefined") {
     new Splide("#screenshot-carousel", {
@@ -35,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
       gap: "2rem",
       pagination: true,
       arrows: false,
-      autoplay: true,
+      autoplay: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       interval: 3000,
       pauseOnHover: true,
       breakpoints: {
@@ -60,7 +123,7 @@ window.onload = function () {
   assignNavClass();
   window.addEventListener("resize", assignNavClass);
   setupNavToggle();
-  // 1. Instant loading: fetch stats.json (hosted on same domain, zero API rate limits)
+  // Load live repository and release data in the browser.
   fetchProjectStats();
   // 2. Fetch features list
   fetchAppFeatures(FEATURES_URL);
@@ -112,40 +175,8 @@ function applyReleaseData(data) {
 }
 
 function fetchProjectStats() {
-  // Always query with timestamp to avoid browser/CDN caching
-  const cacheBusterUrl = STATS_URL + "?t=" + Date.now();
-  makeHttpRequest(
-    cacheBusterUrl,
-    (res) => {
-      try {
-        const stats = JSON.parse(res);
-        const starsEl = document.getElementById("stat-stars");
-        const forksEl = document.getElementById("stat-forks");
-        const downloadsEl = document.getElementById("stat-downloads");
-        const downloadsSubEl = document.getElementById("stat-downloads-sub");
-
-        if (starsEl && stats.stars !== undefined) starsEl.textContent = formatNumber(stats.stars);
-        if (forksEl && stats.forks !== undefined) forksEl.textContent = formatNumber(stats.forks);
-        if (downloadsEl && stats.downloads !== undefined) downloadsEl.textContent = formatNumber(stats.downloads);
-
-        if (downloadsSubEl) {
-          if (stats.apk_downloads && stats.ipa_downloads) {
-            downloadsSubEl.textContent = `${stats.apk_downloads} APK · ${stats.ipa_downloads} IPA`;
-          } else {
-            downloadsSubEl.textContent = "Android APK & iOS IPA";
-          }
-        }
-
-        applyReleaseData(stats);
-      } catch (e) {
-        console.warn("stats.json parse error, falling back to API:", e);
-        fetchProjectStatsFromAPI();
-      }
-    },
-    () => {
-      fetchProjectStatsFromAPI();
-    },
-  );
+  fetchProjectStatsFromAPI();
+  fetchLatestRelease();
 }
 
 function fetchProjectStatsFromAPI() {
@@ -157,7 +188,7 @@ function fetchProjectStatsFromAPI() {
         const repo = JSON.parse(res);
         const starsEl = document.getElementById("stat-stars");
         const forksEl = document.getElementById("stat-forks");
-        if (starsEl) starsEl.textContent = formatNumber(repo.stargazers_count || 1);
+        if (starsEl) starsEl.textContent = formatNumber(repo.stargazers_count || 0);
         if (forksEl) forksEl.textContent = formatNumber(repo.forks_count || 0);
       } catch (e) {
         console.warn("Could not load repo stats:", e);
@@ -191,7 +222,7 @@ function fetchProjectStatsFromAPI() {
         if (downloadsEl) downloadsEl.textContent = formatNumber(total);
 
         const downloadsSubEl = document.getElementById("stat-downloads-sub");
-        if (downloadsSubEl && apkTotal && ipaTotal) {
+        if (downloadsSubEl) {
           downloadsSubEl.textContent = `${apkTotal} APK · ${ipaTotal} IPA`;
         }
       } catch (e) {
@@ -236,7 +267,7 @@ function fetchLatestRelease() {
       }
     },
     () => {
-      // Do nothing on rate-limit failure; static HTML & stats.json already display the content
+      // Keep the static page usable if GitHub API rate limits are reached.
     },
   );
 }

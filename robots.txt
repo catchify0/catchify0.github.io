@@ -49,11 +49,5 @@ Allow: /*.woff$
 Allow: /*.woff2$
 Allow: /*.ttf$
 
-# Crawl delay (ignored by Google, respected by some crawlers)
-Crawl-delay: 5
-
 # Sitemap
 Sitemap: https://catchify0.github.io/sitemap.xml
-
-# Preferred Host
-Host: catchify0.github.io

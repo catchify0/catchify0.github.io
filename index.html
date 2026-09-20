@@ -19,6 +19,7 @@
     <meta name="googlebot" content="index, follow" />
     <meta name="author" content="Thamodharan Ganesan" />
     <meta name="theme-color" content="#fffbea" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111827" />
     <meta name="application-name" content="Catchify" />
     <meta name="google-site-verification" content="9zC34fSpgyMnwF8GUffEfNrquEFpQy9s4Bbg8fO726U" />
     <meta name="google-site-verification" content="Ao05b9GYE1DpdheLQb3PSyl-9SZUAfSguNKBjlmWiD4" />
@@ -31,6 +32,18 @@
     <link rel="manifest" href="manifest.json" />
     <meta name="msapplication-config" content="browserconfig.xml" />
     <meta name="msapplication-TileColor" content="#a855f7" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("catchify-theme") || "system";
+          var dark = mode === "dark" || (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.dataset.themeMode = mode;
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+          document.documentElement.style.colorScheme = dark ? "dark" : "light";
+          document.documentElement.classList.add(dark ? "theme-dark" : "theme-light");
+        } catch (e) {}
+      }());
+    </script>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -423,13 +436,33 @@
       rel="stylesheet"
     />
   </head>
-  <body class="light">
+  <body>
+    <script>
+      if (document.documentElement.classList.contains("theme-dark")) {
+        document.body.classList.replace("light", "dark");
+      }
+    </script>
     <nav id="navigation-bar">
       <div class="catchify-nav-logo">
         <a href="index.html" class="nav-brand-link">
           <img class="catchify-logo" src="assets/logo.png" alt="Catchify logo" width="44" height="44" />
           <span class="nav-brand-name">Catchify</span>
         </a>
+        <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Switch to dark mode"
+          aria-pressed="false"
+          title="Switch color theme"
+        >
+          <span class="theme-toggle-track" aria-hidden="true">
+            <span class="theme-toggle-thumb">
+              <span class="theme-toggle-icon">☀</span>
+            </span>
+          </span>
+          <span class="theme-toggle-label">Light</span>
+        </button>
         <button
           id="nav-toggle"
           class="nav-toggle-btn"
@@ -466,6 +499,14 @@
         <i>chat_bubble</i>
         <span>F.A.Q</span>
       </a>
+      <label class="theme-control" for="theme-select">
+        <span>Theme</span>
+        <select id="theme-select" aria-label="Color theme">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
     </nav>
     <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
@@ -569,7 +610,7 @@
             <div class="stat-content">
               <span class="stat-label">Downloads</span>
               <a href="https://github.com/catchify0/catchify0.github.io/releases" target="_blank" rel="noopener noreferrer" class="stat-value-link">
-                <span id="stat-downloads" class="stat-value">113</span>
+                <span id="stat-downloads" class="stat-value">—</span>
               </a>
               <span id="stat-downloads-sub" class="stat-subtext">Android APK &amp; iOS IPA</span>
             </div>
