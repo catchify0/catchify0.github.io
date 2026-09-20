@@ -18,7 +18,7 @@ This project and its community are dedicated to providing a harassment-free expe
 
 ## Reporting Harassment
 
-If you experience or witness harassment, please report it immediately by contacting the project maintainer via [GitHub Discussions](https://github.com/thamodharangm/catchify/discussions) or opening a private report.
+If you experience or witness harassment, please report it immediately by contacting the project maintainer via [GitHub Discussions](https://github.com/catchify0/catchify0.github.io/discussions) or opening a private report.
 
 ## Consequences
 

@@ -1,15 +1,15 @@
 <div align="center">
-<img src="https://github.com/thamodharangm/catchify/raw/main/.github/assets/catchify-banner-v2.png" width="100%">
+<img src="https://github.com/catchify0/catchify0.github.io/raw/main/.github/assets/catchify-banner-v2.png" width="100%">
 
 # Catchify
 
 Unlock the full potential of music: Stream effortlessly with one app!
 
-[![Stars](https://img.shields.io/github/stars/thamodharangm/catchify?style=flat-square&color=a855f7&label=Stars)](https://github.com/thamodharangm/catchify/stargazers)
-[![Forks](https://img.shields.io/github/forks/thamodharangm/catchify?style=flat-square&color=a855f7&label=Forks)](https://github.com/thamodharangm/catchify/fork)
-[![Downloads](https://img.shields.io/github/downloads/thamodharangm/catchify/total?style=flat-square&color=a855f7&label=Downloads)](https://github.com/thamodharangm/catchify/releases)
-[![Release](https://img.shields.io/github/v/release/thamodharangm/catchify?style=flat-square&color=a855f7&label=Release)](https://github.com/thamodharangm/catchify/releases)
-[![License](https://img.shields.io/github/license/thamodharangm/catchify?style=flat-square&color=a855f7&label=License)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/catchify0/catchify0.github.io?style=flat-square&color=a855f7&label=Stars)](https://github.com/catchify0/catchify0.github.io/stargazers)
+[![Forks](https://img.shields.io/github/forks/catchify0/catchify0.github.io?style=flat-square&color=a855f7&label=Forks)](https://github.com/catchify0/catchify0.github.io/fork)
+[![Downloads](https://img.shields.io/github/downloads/catchify0/catchify0.github.io/total?style=flat-square&color=a855f7&label=Downloads)](https://github.com/catchify0/catchify0.github.io/releases)
+[![Release](https://img.shields.io/github/v/release/catchify0/catchify0.github.io?style=flat-square&color=a855f7&label=Release)](https://github.com/catchify0/catchify0.github.io/releases)
+[![License](https://img.shields.io/github/license/catchify0/catchify0.github.io?style=flat-square&color=a855f7&label=License)](LICENSE)
 
 ---
 
@@ -63,13 +63,13 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/thamodharangm/catchify/releases/latest">
-        <img src="https://github.com/thamodharangm/catchify/raw/main/.github/assets/get-it-on-github.png" alt="Get Android APK" height="60"><br/>
+      <a href="https://github.com/catchify0/catchify0.github.io/releases/latest">
+        <img src="https://github.com/catchify0/catchify0.github.io/raw/main/.github/assets/get-it-on-github.png" alt="Get Android APK" height="60"><br/>
         <b>Android (.apk)</b>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/thamodharangm/catchify/releases/latest">
+      <a href="https://github.com/catchify0/catchify0.github.io/releases/latest">
         <img src="https://img.shields.io/badge/iOS_IPA-Download_Latest-007AFF?style=for-the-badge&logo=apple&logoColor=white" height="60" alt="Download iOS IPA"><br/>
         <b>iOS (.ipa)</b>
       </a>
@@ -83,8 +83,8 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
   </tr>
 </table>
 
-- **Android Direct Download:** [Latest APK](https://github.com/thamodharangm/catchify/releases/latest)
-- **iOS Sideloading (Sideloadly / AltStore / TrollStore):** [Latest IPA](https://github.com/thamodharangm/catchify/releases/latest)
+- **Android Direct Download:** [Latest APK](https://github.com/catchify0/catchify0.github.io/releases/latest)
+- **iOS Sideloading (Sideloadly / AltStore / TrollStore):** [Latest IPA](https://github.com/catchify0/catchify0.github.io/releases/latest)
 - **Official Website:** [catchify.textmateai.online](https://catchify.textmateai.online/)
 
 
@@ -94,8 +94,8 @@ Material UI & accent colors & dynamic colors (Android 12+) <br/>
 
 Special thanks to all contributors for their time and effort.
 
-<a href="https://github.com/thamodharangm/catchify/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=thamodharangm/catchify" alt="Contributors"/>
+<a href="https://github.com/catchify0/catchify0.github.io/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=catchify0/catchify0.github.io" alt="Contributors"/>
 </a>
 
 
@@ -103,13 +103,13 @@ Special thanks to all contributors for their time and effort.
 
 ## Contribute
 
-Contributions are always welcome. Please read our [contributing guidelines](https://github.com/thamodharangm/catchify/blob/main/CONTRIBUTING.md) before contributing.
+Contributions are always welcome. Please read our [contributing guidelines](https://github.com/catchify0/catchify0.github.io/blob/main/CONTRIBUTING.md) before contributing.
 
 ---
 
 ## F.A.Q
 
-You can see frequently asked questions and their answers [here](https://github.com/thamodharangm/catchify/discussions/728).
+You can see frequently asked questions and their answers [here](https://github.com/catchify0/catchify0.github.io/discussions/728).
 
 ---
 
@@ -132,7 +132,7 @@ retain copyright notices and include a copy of the license in distributions.
 Allowed: Commercial use, modification, distribution, and patent use.
 ```
 
-See the [Apache License 2.0](https://github.com/thamodharangm/catchify/blob/main/LICENSE) for full details.
+See the [Apache License 2.0](https://github.com/catchify0/catchify0.github.io/blob/main/LICENSE) for full details.
 
 ---
 

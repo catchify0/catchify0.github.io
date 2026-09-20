@@ -9,8 +9,8 @@ Developer: Thamodharan Ganesan
 Platforms: Android (5.0+), iOS (15.0+ for iPhone & iPad)
 Category: Music & Audio / Audio Player
 License: Free & Open Source — no ads, no subscriptions, no hidden costs
-Source Code: https://github.com/thamodharangm/catchify
-Releases & Downloads: https://github.com/thamodharangm/catchify/releases/latest
+Source Code: https://github.com/catchify0/catchify0.github.io
+Releases & Downloads: https://github.com/catchify0/catchify0.github.io/releases/latest
 
 ---
 
@@ -66,7 +66,7 @@ Catchify is a free, open-source music streaming and offline download application
 # Installation & Downloads
 
 Official downloads are distributed exclusively through the GitHub Releases page:
-https://github.com/thamodharangm/catchify/releases/latest
+https://github.com/catchify0/catchify0.github.io/releases/latest
 
 ### Android Installation
 1. Download `catchify-v2.4.0.apk` from the official GitHub releases page.
@@ -76,7 +76,7 @@ https://github.com/thamodharangm/catchify/releases/latest
 
 ### iOS (iPhone & iPad) Installation
 Catchify is packaged as a free, official IPA file (`Catchify-v2.4.0.ipa`). Because it is free and open-source without App Store restrictions, users sideload it using standard free tools without jailbreaking:
-1. Download `Catchify-v2.4.0.ipa` from https://github.com/thamodharangm/catchify/releases/latest.
+1. Download `Catchify-v2.4.0.ipa` from https://github.com/catchify0/catchify0.github.io/releases/latest.
 2. Install **Sideloadly** (from https://sideloadly.io) on your Windows or Mac PC.
 3. Connect your iPhone via USB, open Sideloadly, drag the Catchify IPA into Sideloadly, enter your Apple ID, and click **Start**.
 4. Once installed, go to **Settings > General > VPN & Device Management** on your iPhone and tap **Trust** on your Apple ID certificate.
@@ -103,7 +103,7 @@ Q: Does Catchify support offline listening?
 A: Yes. You can download individual songs or complete playlists to your device storage and listen completely offline without cellular data or Wi-Fi.
 
 Q: Is Catchify safe to install?
-A: Yes. Catchify is 100% open-source and its complete source code is audited and publicly accessible on GitHub (https://github.com/thamodharangm/catchify). It contains no spyware, trackers, or hidden analytics.
+A: Yes. Catchify is 100% open-source and its complete source code is audited and publicly accessible on GitHub (https://github.com/catchify0/catchify0.github.io). It contains no spyware, trackers, or hidden analytics.
 
 Q: Who created Catchify?
 A: Catchify was created and is actively maintained by Thamodharan Ganesan, an independent software developer.
