@@ -26,7 +26,7 @@ jobs:
           REPO=$(curl -s \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/catchify0/catchify.io")
+            "https://api.github.com/repos/catchify0/catchify0.github.io")
 
           STARS=$(echo "$REPO" | python3 -c "
           import json, sys
@@ -51,7 +51,7 @@ jobs:
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/catchify0/catchify.io/releases?per_page=100" > /tmp/releases.json
+            "https://api.github.com/repos/catchify0/catchify0.github.io/releases?per_page=100" > /tmp/releases.json
 
           STARS=$STARS FORKS=$FORKS python3 -c "
           import json, sys, os
@@ -82,8 +82,8 @@ jobs:
           version = latest.get('tag_name', 'v2.4.0')
           body = latest.get('body', '')
 
-          apk_url = 'https://github.com/catchify0/catchify.io/releases/download/2.4.0/catchify-v2.4.0.apk'
-          ipa_url = 'https://github.com/catchify0/catchify.io/releases/download/2.4.0/Catchify-v2.4.0.ipa'
+          apk_url = 'https://github.com/catchify0/catchify0.github.io/releases/download/2.4.0/catchify-v2.4.0.apk'
+          ipa_url = 'https://github.com/catchify0/catchify0.github.io/releases/download/2.4.0/Catchify-v2.4.0.ipa'
 
           for a in latest.get('assets', []):
               name = a.get('name', '').lower()
