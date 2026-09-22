@@ -747,12 +747,26 @@ main {
 
 .apk-variant-control select {
   min-width: 4.4rem;
+  min-height: 2rem;
   border: 0;
+  border-radius: 0.45rem;
   outline: 0;
-  background: transparent;
-  color: inherit;
+  background: var(--surface-container-highest, #f3f4f6);
+  color: var(--on-surface, #1f2937);
   font: inherit;
   cursor: pointer;
+  color-scheme: light;
+}
+
+.apk-variant-control select option {
+  background: #ffffff;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.apk-variant-control select:focus-visible {
+  outline: 2px solid var(--primary, #a855f7);
+  outline-offset: 2px;
 }
 
 .platform-btn {
