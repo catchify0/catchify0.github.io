@@ -24,17 +24,6 @@
   color-scheme: light;
 }
 
-:root[data-theme="dark"] .platform-btn.btn-support {
-  background: #431407;
-  color: #fdba74;
-  border-color: #9a3412;
-}
-
-:root[data-theme="dark"] .platform-btn.btn-support:hover {
-  background: #7c2d12;
-  border-color: #fb923c;
-}
-
 :root[data-theme="dark"] {
   --theme-primary: #c084fc;
   --theme-on-primary: #3b0764;
@@ -905,21 +894,6 @@ main {
   background: #f9fafb;
   border-color: #9ca3af;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-/* Optional project support */
-.platform-btn.btn-support {
-  background: #fff7ed;
-  color: #c2410c;
-  border: 1.5px solid #fdba74;
-  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.1);
-}
-
-.platform-btn.btn-support:hover {
-  transform: translateY(-2px);
-  background: #ffedd5;
-  border-color: #fb923c;
-  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.18);
 }
 
 /* Tablet Layout (601px - 992px): Spacious Horizontal Button Layout */
