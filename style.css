@@ -25,11 +25,11 @@
 }
 
 :root[data-theme="dark"] {
-  --theme-primary: #d8b4fe;
+  --theme-primary: #c084fc;
   --theme-on-primary: #3b0764;
-  --theme-primary-container: #581c87;
-  --theme-on-primary-container: #f3e8ff;
-  --theme-secondary: #d8b4fe;
+  --theme-primary-container: #6b21a8;
+  --theme-on-primary-container: #fae8ff;
+  --theme-secondary: #a855f7;
   --theme-on-secondary: #3b0764;
   --theme-tertiary: #f9a8d4;
   --theme-on-tertiary: #500724;
