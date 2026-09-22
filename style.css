@@ -976,11 +976,13 @@ main {
   }
 
   .hero-actions > .platform-btn.btn-ios {
-    width: 88%;
+    width: 100%;
+    max-width: 280px;
   }
 
   .hero-actions > .platform-btn.btn-github {
-    width: 76%;
+    width: 100%;
+    max-width: 280px;
   }
 
   .platform-btn .btn-badge {
@@ -1006,11 +1008,13 @@ main {
   }
 
   .hero-actions > .platform-btn.btn-ios {
-    width: 88%;
+    width: 100%;
+    max-width: 250px;
   }
 
   .hero-actions > .platform-btn.btn-github {
-    width: 76%;
+    width: 100%;
+    max-width: 250px;
   }
 }
 
