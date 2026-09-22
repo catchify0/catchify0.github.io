@@ -81,11 +81,15 @@ function applyReleaseData(data) {
       const androidVersion = data.android_version || data.version;
       versionAndroidEl.textContent = androidVersion.startsWith("v") ? androidVersion : "v" + androidVersion;
     }
+    const buttonVersionAndroidEl = document.getElementById("download-button-version-android");
+    if (buttonVersionAndroidEl) buttonVersionAndroidEl.textContent = versionStr;
     const versionIosEl = document.getElementById("download-version-ios");
     if (versionIosEl) {
       const iosVersion = data.ios_version || data.version;
       versionIosEl.textContent = iosVersion.startsWith("v") ? iosVersion : "v" + iosVersion;
     }
+    const buttonVersionIosEl = document.getElementById("download-button-version-ios");
+    if (buttonVersionIosEl) buttonVersionIosEl.textContent = versionStr;
   }
 
   // 2. Android APK Link
@@ -97,11 +101,32 @@ function applyReleaseData(data) {
       });
   }
 
+  if (data.android_assets) {
+    setupAndroidApkVariants(data.android_assets, data.version);
+  }
+
   // 3. iOS IPA Link
   if (data.ipa_url) {
     document.querySelectorAll("[data-download-link='ios']").forEach((el) => {
       el.setAttribute("href", data.ipa_url);
     });
+  }
+
+  function setupAndroidApkVariants(assets, version) {
+    const select = document.getElementById("android-apk-variant");
+    const link = document.querySelector("[data-download-link='android']");
+    if (!select || !link) return;
+
+    const updateLink = () => {
+      const asset = assets[select.value] || assets["arm64-v8a"] || Object.values(assets)[0];
+      if (!asset) return;
+      link.href = asset.url;
+      if (asset.name) link.download = asset.name;
+      link.setAttribute("aria-label", `Download Android ${version || ""} ${select.value} APK`.trim());
+    };
+
+    select.addEventListener("change", updateLink);
+    updateLink();
   }
 
   // 4. Changelog
@@ -178,6 +203,14 @@ function fetchLatestRelease() {
         if (!release || !release.assets) return;
 
         // 1. Android Asset Selection (.apk)
+        const androidAssets = {};
+        (release.assets || []).filter((a) => a.name.toLowerCase().endsWith(".apk")).forEach((asset) => {
+          const match = asset.name.match(/-(arm64-v8a|armeabi-v7a|x86_64)\.apk$/i);
+          if (match) androidAssets[match[1].toLowerCase()] = {
+            name: asset.name,
+            url: asset.browser_download_url,
+          };
+        });
         let apkAsset = (release.assets || []).find(
           (a) =>
             a.name.endsWith(".apk") &&
@@ -195,6 +228,7 @@ function fetchLatestRelease() {
         applyReleaseData({
           version: versionStr,
           apk_url: apkAsset ? apkAsset.browser_download_url : undefined,
+          android_assets: androidAssets,
           ipa_url: iosAsset ? iosAsset.browser_download_url : undefined,
           changelog: release.body || undefined,
         });

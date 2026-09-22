@@ -718,6 +718,43 @@ main {
   margin-top: 1.25rem;
 }
 
+.platform-download-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0.45rem;
+}
+
+.btn-version {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.86;
+}
+
+.apk-variant-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 48px;
+  padding: 0 0.7rem;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--surface, #ffffff) 88%, #a855f7 12%);
+  color: var(--on-surface, #374151);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.apk-variant-control select {
+  min-width: 4.4rem;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .platform-btn {
   display: inline-flex;
   align-items: center;
@@ -851,11 +888,28 @@ main {
     border-radius: 10px;
   }
 
-  .platform-btn:nth-child(2) {
+  .platform-download-group {
+    width: 100%;
+    max-width: 280px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .platform-download-group .platform-btn {
+    flex: 1 1 100%;
+  }
+
+  .apk-variant-control {
+    min-height: 40px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-actions > .platform-btn.btn-ios {
     width: 88%;
   }
 
-  .platform-btn:nth-child(3) {
+  .hero-actions > .platform-btn.btn-github {
     width: 76%;
   }
 
@@ -881,11 +935,11 @@ main {
     border-radius: 10px;
   }
 
-  .platform-btn:nth-child(2) {
+  .hero-actions > .platform-btn.btn-ios {
     width: 88%;
   }
 
-  .platform-btn:nth-child(3) {
+  .hero-actions > .platform-btn.btn-github {
     width: 76%;
   }
 }
