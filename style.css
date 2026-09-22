@@ -747,7 +747,7 @@ main {
 }
 
 .android-download-control select {
-  min-width: 4.7rem;
+  min-width: 10.5rem;
   min-height: 2rem;
   border: 0;
   border-radius: 0.45rem;

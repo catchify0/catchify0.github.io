@@ -122,7 +122,7 @@ function applyReleaseData(data) {
       if (!asset) return;
       link.href = asset.url;
       if (asset.name) link.download = asset.name;
-      link.setAttribute("aria-label", `Download Android ${version || ""} ${select.value} APK`.trim());
+      link.setAttribute("aria-label", `Download Android ${version || ""} ${select.options[select.selectedIndex].text} APK`.trim());
     };
 
     select.addEventListener("change", updateLink);
