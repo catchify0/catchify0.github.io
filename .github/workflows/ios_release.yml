@@ -1,0 +1,440 @@
+name: Build and Package iOS and Android
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: catchify-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest
+    env:
+      CATCHIFY_TOKEN: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate website release token
+        env:
+          CATCHIFY_WEBSITE_TOKEN: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+        run: |
+          if [ -z "$CATCHIFY_WEBSITE_TOKEN" ]; then
+            echo "CATCHIFY_WEBSITE_TOKEN is required to publish assets to catchify0/catchify0.github.io"
+            exit 1
+          fi
+          if ! curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $CATCHIFY_WEBSITE_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/user > /dev/null; then
+            echo "CATCHIFY_WEBSITE_TOKEN was rejected by GitHub. Rotate/update the repository secret before running a release."
+            exit 1
+          fi
+          repo_info=$(curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $CATCHIFY_WEBSITE_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/catchify0/catchify0.github.io)
+          if [ -z "$repo_info" ]; then
+            echo "CATCHIFY_WEBSITE_TOKEN cannot access catchify0/catchify0.github.io. Use a token with the required repository release permissions."
+            exit 1
+          fi
+          can_push=$(printf '%s' "$repo_info" | python3 -c 'import json,sys; print(str(json.load(sys.stdin).get("permissions", {}).get("push", False)).lower())')
+          if [ "$can_push" != "true" ]; then
+            echo "CATCHIFY_WEBSITE_TOKEN can read catchify0/catchify0.github.io but cannot write releases. Grant Contents: Read and write on the fine-grained token."
+            exit 1
+          fi
+
+      - name: Extract version from pubspec.yaml
+        id: extract_version
+        run: |
+          version=$(sed -n 's/^version: *\([0-9.]*\)+\([0-9]*\).*/\1/p' pubspec.yaml | head -n 1)
+          build=$(sed -n 's/^version: *[0-9.]*+\([0-9]*\).*/\1/p' pubspec.yaml | head -n 1)
+          if [ -z "$version" ] || [ -z "$build" ]; then
+            echo "Unable to extract version and build number from pubspec.yaml"
+            exit 1
+          fi
+          echo "version=${version}" >> $GITHUB_OUTPUT
+          echo "build=${build}" >> $GITHUB_OUTPUT
+
+      - name: Validate generated app version
+        run: |
+          bash update.sh
+          if ! git diff --quiet -- lib/constants/version.dart; then
+            echo "lib/constants/version.dart is out of sync with pubspec.yaml"
+            git diff -- lib/constants/version.dart
+            exit 1
+          fi
+
+      - name: Setup Flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.4'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze Dart sources
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run Flutter tests
+        run: flutter test
+
+      - name: Precache iOS artifacts
+        run: flutter precache --ios
+
+      - name: Build iOS (Release, Unsigned)
+        env:
+          CODE_SIGNING_ALLOWED: "NO"
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGN_IDENTITY: ""
+          DEVELOPMENT_TEAM: "0000000000"
+        run: flutter build ios --release --no-codesign --obfuscate --split-debug-info=build/ios/symbols
+
+      - name: Package Payload into unsigned .IPA
+        run: |
+          if [ ! -d "build/ios/iphoneos/Runner.app" ]; then
+            echo "Error: build/ios/iphoneos/Runner.app was not found!"
+            find build -name "Runner.app" || true
+            exit 1
+          fi
+          cd build/ios/iphoneos
+          rm -rf Payload Catchify.ipa
+          mkdir -p Payload
+          cp -R Runner.app Payload/
+          # Remove any invalid signature traces to ensure clean re-signing in Sideloadly
+          rm -rf Payload/Runner.app/_CodeSignature
+          find Payload -name ".DS_Store" -delete
+          # Set proper executable permissions
+          chmod -R 755 Payload/Runner.app
+          # Preserve symlinks (-y) so Sideloadly codesign tool recognizes dynamic frameworks
+          zip -9 -y -r Catchify.ipa Payload
+          
+          # Also create versioned IPA and distribution ZIP
+          VERSION="${{ steps.extract_version.outputs.version }}"
+          cp Catchify.ipa "Catchify-v${VERSION}.ipa"
+          
+          cat << 'EOF' > README_INSTALL.txt
+          Catchify for iOS - Complete Sideloading Guide
+
+          ============================================================
+          Method 1: Sideloadly (Recommended for Windows & Mac)
+          ============================================================
+          Prerequisites:
+          - Windows Users: Make sure iTunes and iCloud (or Apple Devices app) are installed directly from Apple for USB drivers.
+          - Mac Users: Works out of the box.
+
+          Step-by-Step:
+          1. Download and install Sideloadly from https://sideloadly.io
+          2. Connect your iPhone to your computer via USB. Tap "Trust This Computer" on your iPhone if prompted.
+          3. Open Sideloadly, make sure your connected iPhone is selected under "iDevice".
+          4. Drag and drop Catchify.ipa into the large IPA area in Sideloadly.
+          5. Type your Apple ID email and click "Start". Enter your password/2FA code when prompted.
+          6. Once Sideloadly shows "Done", Catchify will appear on your home screen.
+          7. Trust Certificate: On iPhone, go to Settings > General > VPN & Device Management > tap your Apple ID > tap "Trust".
+          8. Enable Developer Mode (iOS 16, 17, 18+): Go to Settings > Privacy & Security > Developer Mode > turn ON and restart your iPhone. After rebooting, tap "Turn On".
+          9. Open Catchify and enjoy!
+
+          Tip: Sideloadly supports automatic Wi-Fi refresh over your local network so you don't need to plug in a USB cable every 7 days!
+
+          ============================================================
+          Method 2: AltStore or TrollStore
+          ============================================================
+          - AltStore (Universal): Sideload using AltServer on PC/Mac.
+          - TrollStore (Permanent): For compatible devices (iOS 14.0 - 16.6.1 / 17.0), open Catchify.ipa directly in TrollStore for permanent install without 7-day limits.
+          - Jailbreak: Install via Filza with AppSync Unified.
+
+          ============================================================
+          Need Help or Stumbled Upon an Error?
+          ============================================================
+          If you get stuck or see any error code in Sideloadly, ask ChatGPT or Claude:
+          "How do I sideload an IPA file onto iPhone using Sideloadly on [Windows/Mac]? Here is my error: [paste error]"
+          They will provide instant, personalized troubleshooting for your exact setup!
+          EOF
+          zip -9 -r "Catchify-v${VERSION}-iOS.zip" "Catchify-v${VERSION}.ipa" README_INSTALL.txt
+          ls -lh Catchify.ipa "Catchify-v${VERSION}.ipa" "Catchify-v${VERSION}-iOS.zip"
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Catchify-v${{ steps.extract_version.outputs.version }}-iOS
+          path: |
+            build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}.ipa
+            build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}-iOS.zip
+          if-no-files-found: error
+
+      - name: Release iOS IPA to Catchify Website Releases (catchify0/catchify0.github.io)
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: catchify0/catchify0.github.io
+          repo_token: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+          file: build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}.ipa
+          asset_name: Catchify-v${{ steps.extract_version.outputs.version }}.ipa
+          tag: v${{ steps.extract_version.outputs.version }}
+          release_name: v${{ steps.extract_version.outputs.version }}
+          prerelease: false
+          overwrite: true
+
+      - name: Release iOS ZIP to Catchify Website Releases (catchify0/catchify0.github.io)
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: catchify0/catchify0.github.io
+          repo_token: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+          file: build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}-iOS.zip
+          asset_name: Catchify-v${{ steps.extract_version.outputs.version }}-iOS.zip
+          tag: v${{ steps.extract_version.outputs.version }}
+          release_name: v${{ steps.extract_version.outputs.version }}
+          prerelease: false
+          overwrite: true
+
+      - name: Update check.json in Catchify Website
+        env:
+          CATCHIFY_TOKEN: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+          VERSION: ${{ steps.extract_version.outputs.version }}
+        run: |
+          python3 scripts/update_check_json.py --platform ios --version "$VERSION"
+          exit 0
+          # Fetch existing check.json to extract SHA and preserve existing fields
+          RESPONSE=$(curl --fail-with-body --silent --show-error -H "Authorization: Bearer ${CATCHIFY_TOKEN}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/catchify0/catchify0.github.io/contents/check.json")
+          SHA=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['sha'])")
+          
+          if [ -n "$SHA" ]; then
+            EXISTING=$(echo "$RESPONSE" | python3 -c "import sys,json,base64; print(base64.b64decode(json.load(sys.stdin)['content']).decode('utf-8'))")
+            NEW_JSON=$(python3 -c "
+          import json
+          data = json.loads('''$EXISTING''')
+          data['iosurl'] = 'https://github.com/catchify0/catchify0.github.io/releases/download/v${VERSION}/Catchify-v${VERSION}.ipa'
+          data['ioszipurl'] = 'https://github.com/catchify0/catchify0.github.io/releases/download/v${VERSION}/Catchify-v${VERSION}-iOS.zip'
+          print(json.dumps(data, indent=2))
+          ")
+            ENCODED=$(echo "$NEW_JSON" | base64 -w 0 2>/dev/null || echo "$NEW_JSON" | base64)
+            curl --fail-with-body --silent --show-error -X PUT \
+              -H "Authorization: Bearer $CATCHIFY_TOKEN" \
+              -H "Content-Type: application/json" \
+              "https://api.github.com/repos/catchify0/catchify0.github.io/contents/check.json" \
+              -d "{
+                \"message\": \"chore: update check.json with iOS v${VERSION}\",
+                \"content\": \"${ENCODED}\",
+                \"sha\": \"${SHA}\"
+              }"
+            echo "Updated check.json with iOS URLs for v${VERSION}"
+          fi
+
+      - name: Create Local GitHub Release (catchify-app-release)
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}.ipa
+            build/ios/iphoneos/Catchify-v${{ steps.extract_version.outputs.version }}-iOS.zip
+          name: Catchify iOS v${{ steps.extract_version.outputs.version }}
+          tag_name: v${{ steps.extract_version.outputs.version }}-ios
+          draft: false
+          prerelease: false
+          body: |
+            ### Catchify for iOS (.IPA & .ZIP)
+            
+            **Included files:**
+            - `Catchify-v${{ steps.extract_version.outputs.version }}.ipa` - Direct IPA for sideloading
+            - `Catchify-v${{ steps.extract_version.outputs.version }}-iOS.zip` - Bundle with Sideloadly guide & IPA
+            
+            **Sideloadly Step-by-Step Installation:**
+            1. Download and install **Sideloadly** from [sideloadly.io](https://sideloadly.io) (Windows users: ensure iTunes/iCloud are installed for USB drivers).
+            2. Connect your iPhone via USB and tap **Trust** on your phone screen.
+            3. Drag and drop `Catchify-v${{ steps.extract_version.outputs.version }}.ipa` into Sideloadly.
+            4. Enter your Apple ID email and click **Start** (enter password and 2FA prompt to sign).
+            5. On your iPhone: Go to **Settings > General > VPN & Device Management** and trust your developer certificate.
+            6. On iOS 16, 17, 18+: Go to **Settings > Privacy & Security > Developer Mode**, turn it **ON**, and restart your iPhone.
+            7. *(Pro-Tip)*: Enable the Wi-Fi icon in Sideloadly for automatic background wireless refresh over your local network!
+            
+            **Other Installation Methods:**
+            - **TrollStore:** Direct install for permanent sideloading without 7-day limit (iOS 14.0 - 16.6.1 / 17.0).
+            - **AltStore:** Sideload with AltServer.
+            - **Jailbreak (Filza):** Install with AppSync Unified.
+            
+            > **Need Help?** If you encounter any errors or need device-specific steps, ask **ChatGPT** or **Claude**:  
+            > *"How do I sideload an IPA file onto iPhone using Sideloadly on [Windows/Mac]? Here is the error: [paste error]"*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-android:
+    name: Build Android Release APK
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      CATCHIFY_TOKEN: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract version from pubspec.yaml
+        id: extract_version
+        shell: bash
+        run: |
+          version=$(sed -n 's/^version: *\([0-9.]*\).*/\1/p' pubspec.yaml | head -n 1)
+          if [ -z "$version" ]; then
+            echo "Unable to extract the app version from pubspec.yaml"
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install Android SDK components
+        run: |
+          export ANDROID_HOME="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/16.0/bin:$ANDROID_HOME/platform-tools:$PATH"
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;28.2.13676358"
+
+      - name: Setup Flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.4'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Validate generated app version
+        run: |
+          bash update.sh
+          if ! git diff --quiet -- lib/constants/version.dart; then
+            echo "lib/constants/version.dart is out of sync with pubspec.yaml"
+            git diff -- lib/constants/version.dart
+            exit 1
+          fi
+
+      - name: Configure Android release signing
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/key.jks
+          cat > android/key.properties <<EOF
+          keyAlias=$ANDROID_KEY_ALIAS
+          keyPassword=$ANDROID_KEY_PASSWORD
+          storePassword=$ANDROID_STORE_PASSWORD
+          EOF
+
+      - name: Analyze Dart sources
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run Flutter tests
+        run: flutter test
+
+      - name: Build Android Release APKs
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            echo "Android release build attempt ${attempt}/3"
+            if flutter build apk --release --flavor github --split-per-abi; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "Android release build failed; retrying after a transient Gradle/network failure..."
+              sleep $((attempt * 20))
+            fi
+          done
+          echo "Android release build failed after 3 attempts"
+          exit 1
+
+      - name: Collect Android artifacts
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/android
+          mapfile -t apks < <(
+            find build/app/outputs -type f -name 'app-github-*-release.apk' -print
+          )
+          for apk in "${apks[@]}"; do
+            abi=$(basename "$apk" | sed -E 's/^app-github-(.*)-release\.apk$/\1/')
+            cp "$apk" "build/android/catchify-v${{ steps.extract_version.outputs.version }}-${abi}.apk"
+          done
+          if ! compgen -G "build/android/*.apk" > /dev/null; then
+            echo "No signed Android release APK artifact was found"
+            exit 1
+          fi
+          sha256sum build/android/*.apk > "build/android/catchify-v${{ steps.extract_version.outputs.version }}-Android-SHA256SUMS.txt"
+          ls -lh build/android
+
+      - name: Upload Android artifacts
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Catchify-v${{ steps.extract_version.outputs.version }}-Android
+          path: build/android/*
+          if-no-files-found: error
+
+      - name: Publish Android artifacts to Catchify Website Releases
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: catchify0/catchify0.github.io
+          repo_token: ${{ secrets.CATCHIFY_WEBSITE_TOKEN }}
+          file: build/android/*.apk
+          file_glob: true
+          tag: v${{ steps.extract_version.outputs.version }}
+          release_name: v${{ steps.extract_version.outputs.version }}
+          prerelease: false
+          overwrite: true
+
+      - name: Update check.json with Android release URLs
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_STORE_PASSWORD != '' }}
+        env:
+          VERSION: ${{ steps.extract_version.outputs.version }}
+        run: |
+          python3 scripts/update_check_json.py --platform android --version "$VERSION"
+          exit 0
+          set -euo pipefail
+          response=$(curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $CATCHIFY_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/catchify0/catchify0.github.io/contents/check.json")
+          sha=$(echo "$response" | python3 -c "import json,sys; print(json.load(sys.stdin)['sha'])")
+          existing=$(echo "$response" | python3 -c "import base64,json,sys; print(base64.b64decode(json.load(sys.stdin)['content']).decode())")
+          updated=$(EXISTING="$existing" VERSION="$VERSION" python3 -c '
+          import json, os
+          data = json.loads(os.environ["EXISTING"])
+          version = os.environ["VERSION"]
+          base = f"https://github.com/catchify0/catchify0.github.io/releases/download/v{version}/"
+          data["version"] = version
+          data["url"] = base + f"catchify-v{version}-arm64-v8a.apk"
+          data["arm64url"] = data["url"]
+          print(json.dumps(data, indent=2))
+          ')
+          encoded=$(printf "%s" "$updated" | base64 -w 0)
+          curl --fail-with-body --silent --show-error -X PUT \
+            -H "Authorization: Bearer $CATCHIFY_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            "https://api.github.com/repos/catchify0/catchify0.github.io/contents/check.json" \
+            -d "{\"message\":\"chore: update check.json with Android v${VERSION}\",\"content\":\"${encoded}\",\"sha\":\"${sha}\"}"
